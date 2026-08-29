@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=DM+Sans:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap");
 @import "tailwindcss";
 
 :root {
@@ -183,232 +183,9 @@ a:focus-visible {
   text-align: right;
 }
 
-.cassette-stage {
-  --tilt-x: 0deg;
-  --tilt-y: 0deg;
-  --shadow-x: 0px;
-  position: relative;
+.hero-artwork-space {
   width: min(100%, 700px);
-  padding-bottom: 5.2%;
-  perspective: 1100px;
-  touch-action: pan-y;
-}
-
-.cassette-stage--3d {
   aspect-ratio: 660 / 420;
-  padding-bottom: 0;
-}
-
-.cassette-perspective {
-  position: relative;
-  z-index: 2;
-  transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
-  transform-style: preserve-3d;
-  transition: transform .34s cubic-bezier(.22, 1, .36, 1), filter .35s ease;
-  filter: drop-shadow(calc(2px + var(--shadow-x)) 13px 12px rgba(33,28,18,.19)) drop-shadow(0 27px 25px rgba(39,32,20,.14));
-  will-change: transform;
-}
-
-.cassette-perspective--3d {
-  width: 100%;
-  height: 100%;
-  filter: none;
-}
-
-.cassette-canvas {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  touch-action: pan-y;
-}
-
-.cassette-canvas canvas {
-  display: block;
-  width: 100% !important;
-  height: 100% !important;
-  outline: none;
-  touch-action: pan-y;
-}
-
-.cassette-canvas-loading {
-  position: absolute;
-  inset: 8% 4%;
-  border: 1px solid rgba(38, 39, 34, 0.08);
-  border-radius: 16px;
-  background: rgba(77, 72, 59, 0.035);
-  animation: canvas-loading 1.25s ease-in-out infinite alternate;
-}
-
-.state-starting .cassette-perspective {
-  animation: start-mechanism .82s cubic-bezier(.2,.82,.35,1);
-}
-
-.state-playing .cassette-perspective {
-  animation: machine-alive .26s ease-in-out infinite alternate;
-  filter: drop-shadow(calc(2px + var(--shadow-x)) 11px 10px rgba(33,28,18,.22)) drop-shadow(0 21px 22px rgba(39,32,20,.17));
-}
-
-.state-playing .cassette-perspective--3d {
-  animation: none;
-  filter: none;
-}
-
-.cassette-svg {
-  display: block;
-  width: 100%;
-  height: auto;
-  overflow: visible;
-}
-
-.cassette-table-shadow {
-  position: absolute;
-  z-index: 0;
-  left: 10%;
-  right: 10%;
-  bottom: 4%;
-  height: 10%;
-  border-radius: 50%;
-  background: rgba(45, 37, 23, 0.23);
-  filter: blur(18px);
-  transform: translateX(var(--shadow-x));
-  transition: transform .35s ease, opacity .35s ease;
-}
-
-.cassette-table-shadow--3d {
-  bottom: 5%;
-  height: 7%;
-  opacity: 0.14;
-}
-
-.reel {
-  will-change: transform;
-}
-
-.state-playing .reel {
-  animation: reel-spin 1.24s linear infinite;
-}
-
-.state-playing .reel--reverse {
-  animation-direction: reverse;
-  animation-duration: 1.08s;
-}
-
-.state-starting .reel {
-  animation: reel-start .82s cubic-bezier(.34,.05,.32,1);
-}
-
-.state-pausing .reel {
-  animation: reel-stop .36s cubic-bezier(.2,.8,.4,1);
-}
-
-.label-foreign-object {
-  overflow: visible;
-}
-
-.tape-label {
-  position: relative;
-  display: flex;
-  height: 100%;
-  flex-direction: column;
-  padding: 13px 18px 10px;
-  overflow: hidden;
-  color: #292820;
-  background:
-    repeating-linear-gradient(0deg, rgba(63,58,43,.025) 0, rgba(63,58,43,.025) 1px, transparent 1px, transparent 4px),
-    #eee7d2;
-  border: 1px solid rgba(80,72,49,.22);
-  border-radius: 3px 2px 4px 2px;
-  box-shadow: inset 0 0 9px rgba(108,94,59,.07), 2px 3px 3px rgba(40,31,16,.18);
-  transform: rotate(-.65deg);
-  transform-origin: center;
-}
-
-.tape-label::after {
-  position: absolute;
-  right: -8px;
-  bottom: 20px;
-  width: 78px;
-  height: 1px;
-  content: "";
-  background: rgba(94,83,56,.17);
-  transform: rotate(-14deg);
-}
-
-.label-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.label-micro,
-.label-number {
-  font-family: "DM Sans", sans-serif;
-  font-size: 7px;
-  font-weight: 600;
-  letter-spacing: .18em;
-  opacity: .62;
-}
-
-.label-number {
-  font-size: 9px;
-}
-
-.label-title {
-  height: 37px;
-  margin-top: 2px;
-  overflow: hidden;
-  font-family: "DM Sans", sans-serif;
-  font-weight: 600;
-  line-height: 1.05;
-  letter-spacing: -.045em;
-  white-space: nowrap;
-}
-
-.label-artist {
-  height: 18px;
-  overflow: hidden;
-  font-family: "DM Sans", sans-serif;
-  font-weight: 500;
-  line-height: 1.25;
-  letter-spacing: .035em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  opacity: .68;
-}
-
-.label-rule {
-  height: 1px;
-  margin: 2px 0 6px;
-  flex: 0 0 auto;
-  background: repeating-linear-gradient(to right, rgba(71,65,48,.36) 0 5px, transparent 5px 9px);
-}
-
-.label-bottom {
-  display: grid;
-  min-height: 0;
-  flex: 1;
-  grid-template-columns: minmax(0,1fr) 94px;
-  gap: 12px;
-}
-
-.label-note {
-  height: 54px;
-  overflow: hidden;
-  font-family: "Caveat", "Segoe Print", cursive;
-  font-weight: 500;
-  line-height: 1.05;
-  white-space: pre-wrap;
-}
-
-.label-sender {
-  align-self: end;
-  height: 25px;
-  overflow: hidden;
-  font-family: "Caveat", "Segoe Print", cursive;
-  line-height: 1.15;
-  text-align: right;
-  white-space: nowrap;
 }
 
 .transport-wrap {
@@ -653,39 +430,6 @@ a:focus-visible {
   bottom: 6px;
 }
 
-.color-section {
-  padding-bottom: 21px;
-}
-
-.color-picker {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.color-swatch {
-  --swatch: #ccc;
-  width: 29px;
-  height: 29px;
-  padding: 0;
-  border: 2px solid rgba(255,255,255,.65);
-  border-radius: 50%;
-  color: #f4eee2;
-  background: var(--swatch);
-  box-shadow: inset 0 -5px 7px var(--swatch-shadow), 0 0 0 1px rgba(42,42,37,.18), 0 3px 5px rgba(35,31,22,.1);
-  cursor: pointer;
-  transition: transform .25s cubic-bezier(.2,.9,.25,1), box-shadow .25s ease;
-}
-
-.color-swatch:hover {
-  transform: translateY(-2px) scale(1.04);
-}
-
-.color-swatch.is-selected {
-  transform: scale(1.12);
-  box-shadow: inset 0 -5px 7px var(--swatch-shadow), 0 0 0 1px #383a34, 0 5px 8px rgba(35,31,22,.16);
-}
-
 .share-area {
   padding-top: 5px;
 }
@@ -775,42 +519,8 @@ a:focus-visible {
   text-transform: uppercase;
 }
 
-@keyframes reel-spin {
-  to { transform: rotate(360deg); }
-}
-
-@keyframes reel-start {
-  0% { transform: rotate(0deg); }
-  20% { transform: rotate(20deg); }
-  38% { transform: rotate(14deg); }
-  100% { transform: rotate(135deg); }
-}
-
-@keyframes reel-stop {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(55deg); }
-}
-
-@keyframes start-mechanism {
-  0% { transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translateY(0); }
-  9% { transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translateY(4px) rotate(-.18deg); }
-  19% { transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translateY(1px) rotate(.1deg); }
-  48% { transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translateY(2px); }
-  100% { transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translateY(1px); }
-}
-
-@keyframes machine-alive {
-  from { transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translate3d(-.28px, .15px, 0); }
-  to { transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translate3d(.32px, -.18px, 0); }
-}
-
 @keyframes spin {
   to { transform: rotate(360deg); }
-}
-
-@keyframes canvas-loading {
-  from { opacity: .32; }
-  to { opacity: .72; }
 }
 
 @media (min-width: 1500px) {
@@ -818,7 +528,7 @@ a:focus-visible {
     grid-template-columns: minmax(0, 1fr) 388px;
   }
 
-  .cassette-stage {
+  .hero-artwork-space {
     width: min(100%, 730px);
   }
 }
@@ -874,7 +584,7 @@ a:focus-visible {
     font-size: 7px;
   }
 
-  .cassette-stage {
+  .hero-artwork-space {
     width: min(93vw, 650px);
   }
 
@@ -979,7 +689,7 @@ a:focus-visible {
     min-height: calc(100dvh - 116px);
   }
 
-  .cassette-stage {
+  .hero-artwork-space {
     width: 94vw;
     margin-left: -1vw;
   }
@@ -997,10 +707,6 @@ a:focus-visible {
     height: 47px;
   }
 
-  .label-bottom {
-    grid-template-columns: minmax(0, 1fr) 86px;
-    gap: 8px;
-  }
 }
 
 @media (max-height: 760px) and (min-width: 801px) {
@@ -1014,7 +720,7 @@ a:focus-visible {
     padding-bottom: 44px;
   }
 
-  .cassette-stage {
+  .hero-artwork-space {
     width: min(92%, 610px);
   }
 
@@ -1049,13 +755,5 @@ a:focus-visible {
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
-  }
-
-  .state-playing .reel {
-    animation: reel-spin 3s linear infinite !important;
-  }
-
-  .cassette-perspective {
-    transform: none !important;
   }
 }

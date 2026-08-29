@@ -1,14 +1,12 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect } from "react";
 import { useTapeStore } from "../state/tapeStore";
-import { playMechanicalSound } from "../audio/tapeSound";
 
-export function useCassettePlayer() {
+export function useSongPlayer() {
   const playerState = useTapeStore((state) => state.playerState);
   const progress = useTapeStore((state) => state.progress);
   const durationMs = useTapeStore((state) => state.track.durationMs);
   const setPlayerState = useTapeStore((state) => state.setPlayerState);
   const setProgress = useTapeStore((state) => state.setProgress);
-  const transitionTimer = useRef<number | null>(null);
 
   useEffect(() => {
     if (playerState !== "playing") return;
@@ -25,30 +23,18 @@ export function useCassettePlayer() {
     return () => window.clearInterval(interval);
   }, [durationMs, playerState, setPlayerState, setProgress]);
 
-  useEffect(() => () => {
-    if (transitionTimer.current) window.clearTimeout(transitionTimer.current);
-  }, []);
-
   const toggle = useCallback(() => {
-    if (playerState === "starting" || playerState === "pausing") return;
-    if (transitionTimer.current) window.clearTimeout(transitionTimer.current);
-
     if (playerState === "playing") {
-      setPlayerState("pausing");
-      playMechanicalSound("stop");
-      transitionTimer.current = window.setTimeout(() => setPlayerState("paused"), 360);
+      setPlayerState("paused");
       return;
     }
 
     if (progress >= 1) setProgress(0);
-    setPlayerState("starting");
-    playMechanicalSound("start");
-    transitionTimer.current = window.setTimeout(() => setPlayerState("playing"), 820);
+    setPlayerState("playing");
   }, [playerState, progress, setPlayerState, setProgress]);
 
   return {
     toggle,
     isPlaying: playerState === "playing",
-    isBusy: playerState === "starting" || playerState === "pausing",
   };
 }

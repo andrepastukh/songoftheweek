@@ -1,12 +1,3 @@
-export type TapeColorId =
-  | "butter"
-  | "tangerine"
-  | "brick"
-  | "moss"
-  | "ocean"
-  | "lilac"
-  | "graphite";
-
 export type TrackMetadata = {
   id: string;
   title: string;
@@ -22,8 +13,7 @@ export type SharedTape = {
   durationMs: number;
   senderName: string;
   message: string;
-  tapeColor: TapeColorId;
   createdAt?: string;
 };
 
-export type PlayerState = "idle" | "starting" | "playing" | "pausing" | "paused" | "error";
+export type PlayerState = "idle" | "playing" | "paused" | "error";

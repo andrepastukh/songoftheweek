@@ -1,5 +1,4 @@
-import type { SharedTape, TapeColorId } from "../types";
-import { TAPE_COLORS } from "../constants";
+import type { SharedTape } from "../types";
 
 function bytesToBase64Url(bytes: Uint8Array): string {
   let binary = "";
@@ -20,15 +19,13 @@ export function encodeTape(tape: SharedTape): string {
 export function decodeTape(value: string): SharedTape | null {
   try {
     const parsed = JSON.parse(new TextDecoder().decode(base64UrlToBytes(value))) as Partial<SharedTape>;
-    const validColor = TAPE_COLORS.some(({ id }) => id === parsed.tapeColor);
     if (
       typeof parsed.title !== "string" ||
       typeof parsed.artist !== "string" ||
       typeof parsed.senderName !== "string" ||
       typeof parsed.message !== "string" ||
       typeof parsed.spotifyTrackId !== "string" ||
-      typeof parsed.durationMs !== "number" ||
-      !validColor
+      typeof parsed.durationMs !== "number"
     ) return null;
 
     return {
@@ -37,7 +34,6 @@ export function decodeTape(value: string): SharedTape | null {
       artist: parsed.artist.slice(0, 100),
       senderName: parsed.senderName.slice(0, 30),
       message: parsed.message.slice(0, 180),
-      tapeColor: parsed.tapeColor as TapeColorId,
       durationMs: Math.max(1, Math.min(parsed.durationMs, 7_200_000)),
       createdAt: typeof parsed.createdAt === "string" ? parsed.createdAt : undefined,
     };

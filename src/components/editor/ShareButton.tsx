@@ -8,7 +8,6 @@ export function ShareButton() {
   const track = useTapeStore((state) => state.track);
   const senderName = useTapeStore((state) => state.senderName);
   const message = useTapeStore((state) => state.message);
-  const tapeColor = useTapeStore((state) => state.tapeColor);
 
   const share = async () => {
     const encoded = encodeTape({
@@ -18,7 +17,6 @@ export function ShareButton() {
       durationMs: track.durationMs,
       senderName: senderName.trim() || "Jemand",
       message: message.trim() || "Ein Song für dich.",
-      tapeColor,
       createdAt: new Date().toISOString(),
     });
     const url = `${window.location.origin}${window.location.pathname}#/tape/${encoded}`;

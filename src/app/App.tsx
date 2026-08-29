@@ -1,8 +1,7 @@
 import { AnimatePresence, motion } from "motion/react";
 import { AlertTriangle, SlidersHorizontal } from "lucide-react";
 import { useEffect, useLayoutEffect, useMemo } from "react";
-import { Cassette } from "../components/cassette/Cassette";
-import { PlayButton } from "../components/cassette/PlayButton";
+import { PlayButton } from "../components/player/PlayButton";
 import { TapeEditor } from "../components/editor/TapeEditor";
 import { AppHeader } from "../components/layout/AppHeader";
 import { useTapeStore } from "../state/tapeStore";
@@ -40,9 +39,9 @@ export function App() {
       )}
 
       <div className={`experience-grid ${editorOpen ? "has-editor" : "editor-closed"}`}>
-        <section className="hero-zone" aria-label="Kassettenspieler">
+        <section className="hero-zone" aria-label="Song der Woche">
           <div className="hero-kicker">A LITTLE SOMETHING FOR YOUR EARS</div>
-          <Cassette />
+          <div className="hero-artwork-space" aria-hidden="true" />
           <PlayButton />
           <div className="hero-caption" aria-hidden="true">
             <span>A</span>
