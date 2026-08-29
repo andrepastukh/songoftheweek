@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { AlertTriangle, SlidersHorizontal } from "lucide-react";
 import { useEffect, useLayoutEffect, useMemo } from "react";
 import { PlayButton } from "../components/player/PlayButton";
+import { Tape } from "../components/tape/Tape";
 import { TapeEditor } from "../components/editor/TapeEditor";
 import { AppHeader } from "../components/layout/AppHeader";
 import { useTapeStore } from "../state/tapeStore";
@@ -41,7 +42,7 @@ export function App() {
       <div className={`experience-grid ${editorOpen ? "has-editor" : "editor-closed"}`}>
         <section className="hero-zone" aria-label="Song der Woche">
           <div className="hero-kicker">A LITTLE SOMETHING FOR YOUR EARS</div>
-          <div className="hero-artwork-space" aria-hidden="true" />
+          <Tape />
           <PlayButton />
           <div className="hero-caption" aria-hidden="true">
             <span>A</span>
@@ -68,8 +69,8 @@ export function App() {
       )}
 
       <footer className="app-footer">
-        <span>Made for sharing, not streaming.</span>
-        <span>DEMO MODE</span>
+        <span>Made with ❤ for the music</span>
+        <span>V 1.0.0</span>
       </footer>
     </main>
   );

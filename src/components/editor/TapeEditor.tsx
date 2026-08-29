@@ -23,7 +23,7 @@ export function TapeEditor() {
     >
       <div className="editor-topline">
         <div>
-          <span className="eyebrow">{sharedMode ? "DIESE KASSETTE" : "DEIN MIXTAPE"}</span>
+          <span className="eyebrow">{sharedMode ? "DIESE KASSETTE" : "DEINE KASSETTE"}</span>
           <h2>{sharedMode ? "Für dich." : "Make it yours."}</h2>
         </div>
         <button className="icon-button close-editor" type="button" onClick={() => setEditorOpen(false)} aria-label="Editor schließen">
@@ -47,9 +47,9 @@ export function TapeEditor() {
       </div>
 
       <div className="editor-section">
-        <label htmlFor="message">Note</label>
+        <label htmlFor="message">Tape text</label>
         <div className="text-input-wrap text-input-wrap--area">
-          <textarea id="message" value={message} maxLength={180} onChange={(event) => setMessage(event.target.value)} placeholder="Schreib etwas Persönliches …" rows={4} />
+          <textarea id="message" value={message} maxLength={180} onChange={(event) => setMessage(event.target.value)} placeholder="Text auf der Kassette …" rows={4} />
           <span>{message.length}/180</span>
         </div>
       </div>
