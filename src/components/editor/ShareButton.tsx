@@ -2,22 +2,20 @@ import { Check, Link2 } from "lucide-react";
 import { useState } from "react";
 import { useTapeStore } from "../../state/tapeStore";
 import { encodeTape } from "../../utils/shareState";
+import { parseSpotifyTrackId } from "../../utils/spotifyUrl";
 
 export function ShareButton() {
   const [status, setStatus] = useState<"idle" | "copied" | "error">("idle");
-  const track = useTapeStore((state) => state.track);
-  const senderName = useTapeStore((state) => state.senderName);
+  const spotifyUrl = useTapeStore((state) => state.spotifyUrl);
   const message = useTapeStore((state) => state.message);
+  const trackId = parseSpotifyTrackId(spotifyUrl);
 
   const share = async () => {
+    if (!trackId) return;
+
     const encoded = encodeTape({
-      spotifyTrackId: track.id,
-      title: track.title,
-      artist: track.artist,
-      durationMs: track.durationMs,
-      senderName: senderName.trim() || "Jemand",
-      message: message.trim() || "Ein Song für dich.",
-      createdAt: new Date().toISOString(),
+      spotifyTrackId: trackId,
+      message: message.trim(),
     });
     const url = `${window.location.origin}${window.location.pathname}#/tape/${encoded}`;
     try {
@@ -32,7 +30,7 @@ export function ShareButton() {
 
   return (
     <div className="share-area">
-      <button className="share-button" type="button" onClick={share}>
+      <button className="share-button" type="button" onClick={share} disabled={!trackId}>
         <span>{status === "copied" ? "Tape kopiert" : "Tape teilen"}</span>
         {status === "copied" ? <Check size={17} /> : <Link2 size={17} />}
       </button>

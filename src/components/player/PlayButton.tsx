@@ -1,15 +1,19 @@
 import { Pause, Play } from "lucide-react";
-import { useSongPlayer } from "../../hooks/useSongPlayer";
 import { useTapeStore } from "../../state/tapeStore";
 
 export function PlayButton() {
-  const playerState = useTapeStore((state) => state.playerState);
-  const { toggle, isPlaying } = useSongPlayer();
-  const label = isPlaying ? "Song pausieren" : "Song abspielen";
+  const isPlaying = useTapeStore((state) => state.isPlaying);
+  const togglePlaying = useTapeStore((state) => state.togglePlaying);
+  const label = isPlaying ? "Spulenanimation pausieren" : "Spulenanimation starten";
 
   return (
     <div className="transport-wrap">
-      <button className={`transport-button state-${playerState}`} onClick={toggle} aria-label={label}>
+      <button
+        className={`transport-button ${isPlaying ? "is-playing" : ""}`}
+        type="button"
+        onClick={togglePlaying}
+        aria-label={label}
+      >
         <span className="transport-button__top">
           {isPlaying ? <Pause size={20} strokeWidth={1.7} fill="currentColor" /> : <Play size={20} strokeWidth={1.7} fill="currentColor" />}
         </span>

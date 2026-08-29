@@ -1,4 +1,5 @@
 import type { SharedTape } from "../types";
+import { isSpotifyTrackId } from "./spotifyUrl";
 
 function bytesToBase64Url(bytes: Uint8Array): string {
   let binary = "";
@@ -20,31 +21,23 @@ export function decodeTape(value: string): SharedTape | null {
   try {
     const parsed = JSON.parse(new TextDecoder().decode(base64UrlToBytes(value))) as Partial<SharedTape>;
     if (
-      typeof parsed.title !== "string" ||
-      typeof parsed.artist !== "string" ||
-      typeof parsed.senderName !== "string" ||
       typeof parsed.message !== "string" ||
       typeof parsed.spotifyTrackId !== "string" ||
-      typeof parsed.durationMs !== "number"
+      !isSpotifyTrackId(parsed.spotifyTrackId)
     ) return null;
 
     return {
       spotifyTrackId: parsed.spotifyTrackId.slice(0, 64),
-      title: parsed.title.slice(0, 120),
-      artist: parsed.artist.slice(0, 100),
-      senderName: parsed.senderName.slice(0, 30),
       message: parsed.message.slice(0, 180),
-      durationMs: Math.max(1, Math.min(parsed.durationMs, 7_200_000)),
-      createdAt: typeof parsed.createdAt === "string" ? parsed.createdAt : undefined,
     };
   } catch {
     return null;
   }
 }
 
-export function tapeFromHash(): { tape: SharedTape | null; shared: boolean; corrupted: boolean } {
+export function tapeFromHash(): { tape: SharedTape | null; corrupted: boolean } {
   const match = window.location.hash.match(/^#\/tape\/([^/]+)$/);
-  if (!match) return { tape: null, shared: false, corrupted: false };
+  if (!match) return { tape: null, corrupted: false };
   const tape = decodeTape(match[1]);
-  return { tape, shared: true, corrupted: tape === null };
+  return { tape, corrupted: tape === null };
 }

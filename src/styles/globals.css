@@ -1,6 +1,4 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap");
-@import "tailwindcss";
-
 :root {
   font-family: "DM Sans", Arial, sans-serif;
   color: #1e211e;
@@ -18,15 +16,21 @@
 }
 
 html {
+  height: 100%;
   min-width: 320px;
+  overflow: hidden;
   background: var(--paper);
 }
 
 body {
+  height: 100%;
   min-width: 320px;
-  min-height: 100vh;
   margin: 0;
-  overflow-x: hidden;
+  overflow: hidden;
+}
+
+#root {
+  height: 100%;
 }
 
 button,
@@ -49,7 +53,7 @@ a:focus-visible {
 
 .app-shell {
   position: relative;
-  min-height: 100dvh;
+  height: 100dvh;
   overflow: hidden;
   isolation: isolate;
   background:
@@ -150,9 +154,10 @@ a:focus-visible {
   align-items: center;
   gap: clamp(28px, 4vw, 76px);
   width: min(1460px, 100%);
-  min-height: calc(100dvh - 156px);
+  height: calc(100dvh - 100px);
+  min-height: 0;
   margin: 0 auto;
-  padding: 18px clamp(28px, 5vw, 88px) 88px;
+  padding: 0 clamp(28px, 5vw, 88px) 56px;
   transition: grid-template-columns .5s cubic-bezier(.22,1,.36,1);
 }
 
@@ -163,7 +168,9 @@ a:focus-visible {
 .hero-zone {
   position: relative;
   display: flex;
+  height: 100%;
   min-width: 0;
+  min-height: 0;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -186,6 +193,7 @@ a:focus-visible {
 .tape-stage {
   position: relative;
   width: min(100%, 700px);
+  max-height: calc(100dvh - 330px);
   aspect-ratio: 1963 / 1403;
   margin: 0;
   container-type: inline-size;
@@ -240,7 +248,7 @@ a:focus-visible {
   transform-origin: 46.50% 46.60%;
 }
 
-.tape-stage.state-playing .tape-reel {
+.tape-stage.is-playing .tape-reel {
   animation-play-state: running;
 }
 
@@ -327,13 +335,9 @@ a:focus-visible {
 }
 
 .transport-button:active:not(:disabled),
-.transport-button.state-playing {
+.transport-button.is-playing {
   transform: translateY(3px);
   box-shadow: 0 1px 0 #050606, 0 4px 8px rgba(26,22,14,.18);
-}
-
-.transport-button:disabled {
-  cursor: wait;
 }
 
 .transport-button__top {
@@ -427,10 +431,6 @@ a:focus-visible {
   border-top: 1px solid var(--line);
 }
 
-.editor-section.compact {
-  width: 100%;
-}
-
 .editor-section > label {
   display: block;
   margin-bottom: 10px;
@@ -494,14 +494,6 @@ a:focus-visible {
   color: #934936;
 }
 
-.spin {
-  animation: spin .9s linear infinite;
-}
-
-.editor-row {
-  display: flex;
-}
-
 .text-input-wrap {
   position: relative;
   display: flex;
@@ -563,14 +555,19 @@ a:focus-visible {
   transition: transform .15s ease, background .2s ease, box-shadow .2s ease;
 }
 
-.share-button:hover {
+.share-button:hover:not(:disabled) {
   background: #2c302b;
   box-shadow: 0 8px 15px rgba(32,35,31,.14);
   transform: translateY(-1px);
 }
 
-.share-button:active {
+.share-button:active:not(:disabled) {
   transform: translateY(1px);
+}
+
+.share-button:disabled {
+  cursor: not-allowed;
+  opacity: .45;
 }
 
 .editor-peek {
@@ -630,10 +627,6 @@ a:focus-visible {
   text-transform: uppercase;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
 @keyframes tape-reel-spin {
   to { transform: rotate(360deg); }
 }
@@ -663,7 +656,7 @@ a:focus-visible {
 
 @media (max-width: 800px) {
   .app-shell {
-    min-height: 100dvh;
+    height: 100dvh;
     overflow-y: auto;
   }
 
@@ -680,6 +673,7 @@ a:focus-visible {
   .experience-grid,
   .experience-grid.editor-closed {
     display: block;
+    height: auto;
     min-height: calc(100dvh - 76px);
     padding: 20px 14px 82px;
   }
@@ -701,6 +695,7 @@ a:focus-visible {
 
   .tape-stage {
     width: min(93vw, 650px);
+    max-height: none;
   }
 
   .transport-wrap {
@@ -830,7 +825,8 @@ a:focus-visible {
   }
 
   .experience-grid {
-    min-height: calc(100dvh - 100px);
+    height: calc(100dvh - 80px);
+    min-height: 0;
     padding-top: 0;
     padding-bottom: 44px;
   }

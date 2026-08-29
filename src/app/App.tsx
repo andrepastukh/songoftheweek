@@ -1,6 +1,5 @@
-import { AnimatePresence, motion } from "motion/react";
 import { AlertTriangle, SlidersHorizontal } from "lucide-react";
-import { useEffect, useLayoutEffect, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { PlayButton } from "../components/player/PlayButton";
 import { Tape } from "../components/tape/Tape";
 import { TapeEditor } from "../components/editor/TapeEditor";
@@ -13,19 +12,18 @@ export function App() {
   const sharedMode = useTapeStore((state) => state.sharedMode);
   const setEditorOpen = useTapeStore((state) => state.setEditorOpen);
   const hydrateSharedTape = useTapeStore((state) => state.hydrateSharedTape);
-  const initialRoute = useMemo(() => tapeFromHash(), []);
-
-  useLayoutEffect(() => {
-    if (initialRoute.tape) hydrateSharedTape(initialRoute.tape);
-  }, [hydrateSharedTape, initialRoute]);
+  const [linkError, setLinkError] = useState(false);
 
   useEffect(() => {
-    const handleHashChange = () => {
+    const loadTapeFromUrl = () => {
       const route = tapeFromHash();
+      setLinkError(route.corrupted);
       if (route.tape) hydrateSharedTape(route.tape);
     };
-    window.addEventListener("hashchange", handleHashChange);
-    return () => window.removeEventListener("hashchange", handleHashChange);
+
+    loadTapeFromUrl();
+    window.addEventListener("hashchange", loadTapeFromUrl);
+    return () => window.removeEventListener("hashchange", loadTapeFromUrl);
   }, [hydrateSharedTape]);
 
   return (
@@ -33,9 +31,9 @@ export function App() {
       <div className="paper-grain" aria-hidden="true" />
       <AppHeader />
 
-      {initialRoute.corrupted && (
+      {linkError && (
         <div className="route-error" role="status">
-          <AlertTriangle size={16} /> Dieser Tape-Link ist beschädigt. Wir zeigen dir stattdessen eine Demo.
+          <AlertTriangle size={16} /> Dieser Tape-Link ist beschädigt. Du kannst eine neue Kassette erstellen.
         </div>
       )}
 
@@ -51,21 +49,18 @@ export function App() {
           </div>
         </section>
 
-        <AnimatePresence>{editorOpen && <TapeEditor />}</AnimatePresence>
+        {editorOpen && <TapeEditor />}
       </div>
 
       {!editorOpen && (
-        <motion.button
+        <button
           className="editor-peek"
           type="button"
           onClick={() => setEditorOpen(true)}
-          initial={{ x: 60 }}
-          animate={{ x: 0 }}
-          transition={{ delay: 0.5, duration: 0.45 }}
         >
           <SlidersHorizontal size={16} />
           <span>{sharedMode ? "ABOUT THIS TAPE" : "CUSTOMIZE"}</span>
-        </motion.button>
+        </button>
       )}
 
       <footer className="app-footer">

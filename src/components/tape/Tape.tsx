@@ -2,8 +2,7 @@ import type { CSSProperties } from "react";
 import { useTapeStore } from "../../state/tapeStore";
 
 export function Tape() {
-  const playerState = useTapeStore((state) => state.playerState);
-  const track = useTapeStore((state) => state.track);
+  const isPlaying = useTapeStore((state) => state.isPlaying);
   const message = useTapeStore((state) => state.message).trim();
   const textSize = message.length > 140
     ? "1.35cqw"
@@ -17,9 +16,9 @@ export function Tape() {
 
   return (
     <figure
-      className={`tape-stage state-${playerState}`}
+      className={`tape-stage ${isPlaying ? "is-playing" : ""}`}
       role="img"
-      aria-label={`${track.title} von ${track.artist}, Kassette`}
+      aria-label="Personalisierte Kassette"
     >
       <div className="tape-composition">
         <img
