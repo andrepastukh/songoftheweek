@@ -8,6 +8,9 @@ export function ShareButton() {
   const [status, setStatus] = useState<"idle" | "copied" | "error">("idle");
   const spotifyUrl = useTapeStore((state) => state.spotifyUrl);
   const message = useTapeStore((state) => state.message);
+  const backgroundId = useTapeStore((state) => state.backgroundId);
+  const designId = useTapeStore((state) => state.designId);
+  const textColorId = useTapeStore((state) => state.textColorId);
   const trackId = parseSpotifyTrackId(spotifyUrl);
 
   const share = async () => {
@@ -16,6 +19,9 @@ export function ShareButton() {
     const encoded = encodeTape({
       spotifyTrackId: trackId,
       message: message.trim(),
+      backgroundId,
+      designId,
+      textColorId,
     });
     const url = `${window.location.origin}${window.location.pathname}#/tape/${encoded}`;
     try {

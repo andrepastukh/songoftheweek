@@ -1,9 +1,16 @@
 import type { CSSProperties } from "react";
 import { useTapeStore } from "../../state/tapeStore";
+import { BACKGROUND_OPTIONS, DESIGN_OPTIONS, TEXT_COLOR_OPTIONS } from "../../tapeOptions";
 
 export function Tape() {
   const isPlaying = useTapeStore((state) => state.isPlaying);
   const message = useTapeStore((state) => state.message).trim();
+  const backgroundId = useTapeStore((state) => state.backgroundId);
+  const designId = useTapeStore((state) => state.designId);
+  const textColorId = useTapeStore((state) => state.textColorId);
+  const background = BACKGROUND_OPTIONS.find((option) => option.id === backgroundId) ?? BACKGROUND_OPTIONS[0];
+  const design = DESIGN_OPTIONS.find((option) => option.id === designId) ?? DESIGN_OPTIONS[0];
+  const textColor = TEXT_COLOR_OPTIONS.find((option) => option.id === textColorId) ?? TEXT_COLOR_OPTIONS[0];
   const textSize = message.length > 140
     ? "1.35cqw"
     : message.length > 100
@@ -47,20 +54,35 @@ export function Tape() {
         />
         <div className="tape-label-stack">
           <img
-            className="tape-layer tape-label-surface"
-            src="/assets/tape/label-surface.webp"
+            className="tape-custom-layer tape-label-background"
+            src={background.src}
+            alt=""
+            draggable={false}
+          />
+          <img
+            className="tape-custom-layer tape-label-design"
+            src={design.src}
             alt=""
             draggable={false}
           />
           <div
             className="tape-user-text"
-            style={{ "--tape-text-size": textSize } as CSSProperties}
+            style={{
+              "--tape-text-size": textSize,
+              "--tape-text-color": textColorId === "white" ? "#f7f4ea" : "#292927",
+            } as CSSProperties}
           >
             {message}
           </div>
           <img
-            className="tape-layer tape-label-artwork"
-            src="/assets/tape/label-artwork.webp"
+            className="tape-custom-layer tape-label-text"
+            src={textColor.sideTextSrc}
+            alt=""
+            draggable={false}
+          />
+          <img
+            className="tape-custom-layer tape-label-text"
+            src={textColor.bottomTextSrc}
             alt=""
             draggable={false}
           />
