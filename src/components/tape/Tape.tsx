@@ -12,14 +12,14 @@ export function Tape() {
   const design = DESIGN_OPTIONS.find((option) => option.id === designId) ?? DESIGN_OPTIONS[0];
   const textColor = TEXT_COLOR_OPTIONS.find((option) => option.id === textColorId) ?? TEXT_COLOR_OPTIONS[0];
   const textSize = message.length > 140
-    ? "1.35cqw"
+    ? "4.35cqw"
     : message.length > 100
-      ? "1.55cqw"
+      ? "4.55cqw"
       : message.length > 60
-        ? "1.75cqw"
+        ? "4.75cqw"
         : message.length > 30
-          ? "2.05cqw"
-          : "2.35cqw";
+          ? "4.05cqw"
+          : "4.35cqw";
 
   return (
     <figure

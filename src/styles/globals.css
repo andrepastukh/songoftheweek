@@ -172,23 +172,35 @@ a:focus-visible {
   height: 100%;
   min-width: 0;
   min-height: 0;
+
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
   padding: 26px 0 52px;
+
+  transform: translateX(0);
+  transition: transform .5s cubic-bezier(.22, 1, .36, 1);
 }
 
 .create-mode .has-editor .hero-zone {
   transform: translateX(-1.5vw);
 }
 
+
+.create-mode .editor-closed .hero-zone {
+  transform: translateX(0);
+}
+
 .hero-kicker {
-  width: min(90%, 670px);
+  width: min(100%, 700px);
   margin: 0 0 20px;
+
   color: #85857b;
   font-size: 9px;
   letter-spacing: .22em;
-  text-align: right;
+
+  text-align: center;
 }
 
 .tape-stage {
@@ -197,6 +209,7 @@ a:focus-visible {
   max-height: calc(100dvh - 330px);
   aspect-ratio: 1963 / 1403;
   margin: 0;
+  margin-left: 4.6vw;
   container-type: inline-size;
   user-select: none;
 }
@@ -283,7 +296,6 @@ a:focus-visible {
 }
 
 .tape-user-text {
-  --tape-text-size: 2.4cqw;
   --tape-text-color: #292927;
 
   position: absolute;
@@ -301,7 +313,9 @@ a:focus-visible {
 
   color: var(--tape-text-color);
   font-family: "Qwigley", cursive;
-  font-size: var(--tape-text-size);
+
+  font-size: var(--tape-text-size); /* <-- DAS FEHLT */
+
   font-weight: 500;
   line-height: 1.05;
   letter-spacing: 0.01em;
@@ -311,6 +325,7 @@ a:focus-visible {
 
 .tape-label-text {
   z-index: 3;
+  padding-top: 1%;
 }
 
 .tape-grain {
@@ -747,6 +762,7 @@ a:focus-visible {
   .tape-stage {
     width: min(93vw, 650px);
     max-height: none;
+    margin-left: 12vw;
   }
 
   .transport-wrap {
