@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap");
 @import url('https://fonts.googleapis.com/css2?family=Qwigley:wght@400;500;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Plaster&display=swap");
 :root {
   font-family: "DM Sans", Arial, sans-serif;
   color: #1e211e;
@@ -100,11 +101,19 @@ a:focus-visible {
   display: inline-flex;
   width: max-content;
   align-items: center;
-  gap: 12px;
+  gap: 15px;
+
   color: var(--ink);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.22em;
+
+  font-family: "Plaster", system-ui;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 35px;
+  color: #292929;
+
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+
   text-decoration: none;
 }
 
@@ -217,7 +226,7 @@ a:focus-visible {
 .tape-composition {
   position: absolute;
   inset: 0;
-  filter: contrast(1.06) saturate(1.02);
+  filter: contrast(1.20) saturate(1.02);
 }
 
 .tape-layer,

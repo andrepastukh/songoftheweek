@@ -39,7 +39,7 @@ export function App() {
 
       <div className={`experience-grid ${editorOpen ? "has-editor" : "editor-closed"}`}>
         <section className="hero-zone" aria-label="Song der Woche">
-          <div className="hero-kicker">A LITTLE SOMETHING FOR YOUR EARS</div>
+          <div className="hero-kicker">A LITTLE SOMETHING FOR YOU</div>
           <Tape />
           <PlayButton />
           <div className="hero-caption" aria-hidden="true">

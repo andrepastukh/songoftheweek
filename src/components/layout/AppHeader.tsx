@@ -14,7 +14,7 @@ export function AppHeader() {
         </span>
         <span>SIDE A</span>
       </a>
-      <div className="header-edition">ISSUE 34 · {new Date().getFullYear()}</div>
+      <div className="header-edition">{new Date().getDate()} - {new Date().getMonth() + 1} - {new Date().getFullYear()}</div>
       {!editorOpen && (
         <button className="header-menu" type="button" onClick={() => setEditorOpen(true)} aria-label="Editor öffnen">
           {sharedMode ? <Menu size={18} /> : <SlidersHorizontal size={17} />}
