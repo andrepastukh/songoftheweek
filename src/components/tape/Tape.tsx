@@ -1,9 +1,12 @@
 import type { CSSProperties } from "react";
 import { useTapeStore } from "../../state/tapeStore";
+import { useSpotifyStore } from "../../state/spotifyStore";
 import { BACKGROUND_OPTIONS, DESIGN_OPTIONS, TEXT_COLOR_OPTIONS } from "../../tapeOptions";
 
+const asset = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, "")}`;
+
 export function Tape() {
-  const isPlaying = useTapeStore((state) => state.isPlaying);
+  const isPlaying = useSpotifyStore((state) => state.isPlaying || state.isStarting || state.isPreviewPlaying);
   const message = useTapeStore((state) => state.message).trim();
   const backgroundId = useTapeStore((state) => state.backgroundId);
   const designId = useTapeStore((state) => state.designId);
@@ -30,38 +33,38 @@ export function Tape() {
       <div className="tape-composition">
         <img
           className="tape-layer tape-shadow"
-          src="/assets/tape/tape-shadow.webp"
+          src={asset("/assets/tape/tape-shadow.webp")}
           alt=""
           draggable={false}
         />
         <img
           className="tape-reel tape-reel--left"
-          src="/assets/tape/reel-left.webp"
+          src={asset("/assets/tape/reel-left.webp")}
           alt=""
           draggable={false}
         />
         <img
           className="tape-reel tape-reel--right"
-          src="/assets/tape/reel-right.webp"
+          src={asset("/assets/tape/reel-right.webp")}
           alt=""
           draggable={false}
         />
         <img
           className="tape-layer tape-shell"
-          src="/assets/tape/tape-shell.webp"
+          src={asset("/assets/tape/tape-shell.webp")}
           alt=""
           draggable={false}
         />
         <div className="tape-label-stack">
           <img
             className="tape-custom-layer tape-label-background"
-            src={background.src}
+            src={asset(background.src)}
             alt=""
             draggable={false}
           />
           <img
             className="tape-custom-layer tape-label-design"
-            src={design.src}
+            src={asset(design.src)}
             alt=""
             draggable={false}
           />
@@ -76,13 +79,13 @@ export function Tape() {
           </div>
           <img
             className="tape-custom-layer tape-label-text"
-            src={textColor.sideTextSrc}
+            src={asset(textColor.sideTextSrc)}
             alt=""
             draggable={false}
           />
           <img
             className="tape-custom-layer tape-label-text"
-            src={textColor.bottomTextSrc}
+            src={asset(textColor.bottomTextSrc)}
             alt=""
             draggable={false}
           />

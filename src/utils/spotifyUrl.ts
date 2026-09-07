@@ -9,15 +9,15 @@ export function parseSpotifyTrackId(input: string): string | null {
   if (!trimmed) return null;
 
   if (trimmed.startsWith("spotify:track:")) {
-    const id = trimmed.split(":").at(-1) ?? "";
+    const id = trimmed.slice("spotify:track:".length);
     return isSpotifyTrackId(id) ? id : null;
   }
 
   try {
     const url = new URL(trimmed);
-    if (url.hostname !== "open.spotify.com") return null;
-    const [, kind, id] = url.pathname.split("/");
-    return kind === "track" && isSpotifyTrackId(id ?? "") ? id : null;
+    if (url.protocol !== "https:" || url.hostname !== "open.spotify.com" || url.port || url.username || url.password) return null;
+    const match = url.pathname.match(/^\/(?:intl-[a-z]{2}\/)?track\/([A-Za-z0-9]{22})\/?$/);
+    return match?.[1] ?? null;
   } catch {
     return null;
   }

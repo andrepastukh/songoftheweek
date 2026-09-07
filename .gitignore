@@ -2,6 +2,10 @@ node_modules
 dist
 .env
 .env.local
+.env.*
+!.env.example
+.pnpm-store/
+test-results/
 *.local
 *.tsbuildinfo
 vite.config.js

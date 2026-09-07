@@ -1,54 +1,45 @@
-import type { SharedTape } from "../types";
-import {
-  DEFAULT_BACKGROUND_ID,
-  DEFAULT_DESIGN_ID,
-  DEFAULT_TEXT_COLOR_ID,
-  isBackgroundId,
-  isDesignId,
-  isTextColorId,
-} from "../tapeOptions";
-import { isSpotifyTrackId } from "./spotifyUrl";
+import type { SharedTape, TapeDesign } from "../types";
+import { DEFAULT_BACKGROUND_ID, DEFAULT_DESIGN_ID, DEFAULT_TEXT_COLOR_ID } from "../tapeOptions";
+import { isRecord, parseTapeDesign } from "./tapeData";
 
-function bytesToBase64Url(bytes: Uint8Array): string {
-  let binary = "";
-  bytes.forEach((byte) => (binary += String.fromCharCode(byte)));
-  return btoa(binary).replaceAll("+", "-").replaceAll("/", "_").replaceAll("=", "");
-}
-
-function base64UrlToBytes(value: string): Uint8Array {
-  const padded = value.replaceAll("-", "+").replaceAll("_", "/").padEnd(Math.ceil(value.length / 4) * 4, "=");
-  const binary = atob(padded);
-  return Uint8Array.from(binary, (character) => character.charCodeAt(0));
-}
-
-export function encodeTape(tape: SharedTape): string {
-  return bytesToBase64Url(new TextEncoder().encode(JSON.stringify(tape)));
+export function encodeTape(input: TapeDesign): string {
+  const tape = parseTapeDesign(input);
+  const compact = [1, tape.spotifyTrackId, tape.message, tape.backgroundId, tape.designId, tape.textColorId];
+  const bytes = new TextEncoder().encode(JSON.stringify(compact));
+  return btoa(String.fromCharCode(...bytes)).replaceAll("+", "-").replaceAll("/", "_").replaceAll("=", "");
 }
 
 export function decodeTape(value: string): SharedTape | null {
   try {
-    const parsed = JSON.parse(new TextDecoder().decode(base64UrlToBytes(value))) as Partial<SharedTape>;
-    if (
-      typeof parsed.message !== "string" ||
-      typeof parsed.spotifyTrackId !== "string" ||
-      !isSpotifyTrackId(parsed.spotifyTrackId)
-    ) return null;
-
-    return {
-      spotifyTrackId: parsed.spotifyTrackId.slice(0, 64),
-      message: parsed.message.slice(0, 180),
-      backgroundId: isBackgroundId(parsed.backgroundId) ? parsed.backgroundId : DEFAULT_BACKGROUND_ID,
-      designId: isDesignId(parsed.designId) ? parsed.designId : DEFAULT_DESIGN_ID,
-      textColorId: isTextColorId(parsed.textColorId) ? parsed.textColorId : DEFAULT_TEXT_COLOR_ID,
-    };
-  } catch {
-    return null;
-  }
+    if (value.length > 4096 || !/^[A-Za-z0-9_-]+$/.test(value)) return null;
+    const padded = value.replaceAll("-", "+").replaceAll("_", "/").padEnd(Math.ceil(value.length / 4) * 4, "=");
+    const bytes = Uint8Array.from(atob(padded), character => character.charCodeAt(0));
+    const parsed: unknown = JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(bytes));
+    if (Array.isArray(parsed)) {
+      if (parsed.length !== 6 || parsed[0] !== 1) return null;
+      return { ...parseTapeDesign({
+        spotifyTrackId: parsed[1], message: parsed[2], backgroundId: parsed[3], designId: parsed[4], textColorId: parsed[5],
+      }), schemaVersion: 1 };
+    }
+    // Legacy links used an unversioned object; early ones omitted artwork IDs.
+    if (!isRecord(parsed) || (parsed.schemaVersion !== undefined && parsed.schemaVersion !== 1)) return null;
+    return { ...parseTapeDesign({
+      ...parsed, backgroundId: parsed.backgroundId ?? DEFAULT_BACKGROUND_ID,
+      designId: parsed.designId ?? DEFAULT_DESIGN_ID, textColorId: parsed.textColorId ?? DEFAULT_TEXT_COLOR_ID,
+    }), schemaVersion: 1 };
+  } catch { return null; }
 }
 
-export function tapeFromHash(): { tape: SharedTape | null; corrupted: boolean } {
-  const match = window.location.hash.match(/^#\/tape\/([^/]+)$/);
-  if (!match) return { tape: null, corrupted: false };
-  const tape = decodeTape(match[1]);
+export function tapeFromHash(hash = window.location.hash): { tape: SharedTape | null; corrupted: boolean } {
+  if (!hash || hash === "#" || hash === "#/") return { tape: null, corrupted: false };
+  const match = hash.match(/^#\/(?:t|tape)\/([^/]+)$/);
+  const tape = match ? decodeTape(match[1]) : null;
   return { tape, corrupted: tape === null };
+}
+
+export function createShareUrl(tape: TapeDesign, pageUrl: string): string {
+  const url = new URL(pageUrl);
+  url.search = "";
+  url.hash = `/t/${encodeTape(tape)}`;
+  return url.href;
 }

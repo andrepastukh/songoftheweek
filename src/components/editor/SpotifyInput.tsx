@@ -20,6 +20,8 @@ export function SpotifyInput() {
           aria-label="Spotify Track URL"
           aria-describedby="spotify-help"
           spellCheck={false}
+          maxLength={2048}
+          aria-invalid={hasError}
         />
         {isValid && <Check size={15} aria-label="Track erkannt" />}
       </div>
@@ -27,7 +29,7 @@ export function SpotifyInput() {
         {hasError
           ? "Bitte einen gültigen Spotify-Track-Link einfügen."
           : isValid
-            ? "Spotify-Track erkannt."
+            ? "Linkformat gültig. Songdetails erscheinen nach dem Verbinden mit Spotify."
             : "Füge einen Spotify-Track-Link ein."}
       </p>
     </div>

@@ -8,9 +8,9 @@ export function AppHeader() {
 
   return (
     <header className="app-header">
-      <a className="wordmark" href="#" aria-label="Side A – Startseite">
+      <a className="wordmark" href={import.meta.env.BASE_URL} aria-label="Side A – Startseite">
         <span className="brand-mark" aria-hidden="true">
-          <img src="/brand/side-a-logo-transparent.png" alt="" />
+          <img src={`${import.meta.env.BASE_URL}brand/side-a-logo-transparent.png`} alt="" />
         </span>
         <span>SIDE A</span>
       </a>

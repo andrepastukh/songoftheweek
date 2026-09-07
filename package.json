@@ -6,8 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run",
+    "typecheck": "tsc -b && tsc -p tsconfig.tests.json"
   },
+  "engines": { "node": ">=24" },
+  "packageManager": "pnpm@11.19.0",
   "dependencies": {
     "lucide-react": "1.34.0",
     "react": "19.2.8",
@@ -15,10 +19,12 @@
     "zustand": "5.0.15"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "6.1.0",
+    "@types/node": "^26.4.1",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.5",
+    "@vitejs/plugin-react": "6.1.0",
     "typescript": "7.0.2",
-    "vite": "8.2.2"
+    "vite": "8.2.2",
+    "vitest": "^5.0.0"
   }
 }
