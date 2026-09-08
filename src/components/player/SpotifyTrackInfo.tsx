@@ -26,8 +26,7 @@ export function SpotifyTrackInfo() {
   if (demo) return <div className="track-info track-info--demo">
     <span className="track-info__demo-cover" aria-hidden="true">A</span>
     <div>
-      <strong>Ausgewählter Spotify-Song</strong>
-      <span>Testverbindung aktiv</span>
+      <strong>Demo-Song</strong>
       <a href={`https://open.spotify.com/track/${id}`} target="_blank" rel="noopener noreferrer">Auf Spotify öffnen ↗</a>
     </div>
   </div>;
