@@ -32,7 +32,7 @@ Auf Wunsch bleibt die komplette Kassette im Link:
 https://NAME.github.io/songoftheweek/#/t/<snapshot>
 ```
 
-Gespeichert werden Formatversion, Spotify-Track-ID, Nachricht und die stabilen IDs für Hintergrund, Design und Textfarbe. Das kompakte JSON-Array wird UTF-8-/Base64URL-kodiert. Es enthält keine Tokens, Bilddateien, Metadaten oder UI-Objekte. Die Nachricht bleibt einschließlich Zeilenumbrüchen und Leerzeichen erhalten; die bestehende Kassettenanzeige trimmt weiterhin äußere Leerzeichen.
+Gespeichert werden Formatversion, Spotify-Track-ID, Nachricht und die stabilen IDs für Kassettenfarbe, Design, Textfarbe und Seitenfarbe. Das kompakte JSON-Array wird UTF-8-/Base64URL-kodiert. Es enthält keine Tokens, Bilddateien, Metadaten oder UI-Objekte. Die Nachricht bleibt einschließlich Zeilenumbrüchen und Leerzeichen erhalten; die bestehende Kassettenanzeige trimmt weiterhin äußere Leerzeichen.
 
 Der Link funktioniert auf anderen Geräten ohne localStorage, solange die App mit kompatiblem Decoder und ihren Artwork-Dateien erreichbar bleibt. Er enthält den gesamten Snapshot: spätere Änderungen im Editor verändern einen bereits verschickten Link nicht. „Neuen Share-Link erstellen“ erzeugt den neuen Stand. Identische Inhalte erzeugen denselben Link. Bisherige `#/tape/<state>`-Links bleiben lesbar.
 
@@ -79,7 +79,7 @@ Ein Browser-Login bei Spotify ersetzt die App-Autorisierung nicht. Side A leitet
 
 Jeder Empfänger benötigt für Browser-Audio ein eigenes Premium-Konto und muss Side A freigeben. Ohne dies bleibt „Auf Spotify öffnen“ verfügbar. Laut aktueller Dokumentation brauchen Development-Mode-Apps einen Premium-Inhaber und erlauben höchstens fünf freigeschaltete Nutzer. OAuth kann für andere Nutzer gelingen, während API-Zugriffe anschließend mit 403 scheitern. Öffentliche Wiedergabe für beliebige Empfänger erfordert eine passende Spotify-Freigabe; Extended Quota ist kein automatisch verfügbarer Schritt für kleine Projekte. [Spotify Quota Modes](https://developer.spotify.com/documentation/web-api/concepts/quota-modes)
 
-Ohne Premium kannst du mit „Mechanik ohne Spotify testen“ trotzdem den neuen Kassettenplayer-Taster, den Startsound und die Spulenanimation vier Sekunden lang prüfen. Damit lässt sich die Side-A-Oberfläche testen, aber Spotify liefert dabei kein Audio.
+Im lokalen Dev-Server erscheint unten im Editor „Spotify UI testen“. „Verbindung simulieren“ zeigt Metadaten- und Player-Zustand und lässt den Kassettenplayer-Taster samt Startsound und Spulenanimation vier Sekunden lang laufen. Der Schalter wird durch `import.meta.env.DEV` aus Produktions-Builds entfernt und liefert kein Spotify-Audio.
 
 Das Web Playback SDK erzeugt das Spotify-Connect-Gerät „Side A Cassette“. Die Web API wählt den Song auf genau diesem Gerät. Der eigene Button steuert Start, Pause und Fortsetzen. Ein Play-Klick kann laufende Wiedergabe auf einem anderen Gerät ablösen; die Oberfläche erklärt dies. Ein Gerätewechsel stoppt die lokale Statusanimation, sobald das SDK ihn meldet.
 
@@ -122,6 +122,17 @@ Ohne Spotify-Variablen funktioniert die veröffentlichte App für Design und Sha
 - `src/services/spotifyAuth.ts`, `spotify.ts`, `spotifyPlayer.ts`, `cassetteSound.ts`: PKCE/Refresh, Metadaten/API, SDK-Steuerung und Startsound
 - `src/hooks/useSpotifyPlayer.ts`: kleine React-Schnittstelle zum Player
 - `ShareButton.tsx`: lokaler Erstellungs-/Copy-/Share-Zustand
+
+### Design selbst ändern
+
+- `src/styles/globals.css`: vollständiges Layout, Abstände, Halftone-Muster und Retro-Play-Taster. `.player-dock` verschiebt den kompletten Player; `.transport-deck` und `.transport-button` gestalten das Gerät und den Taster.
+- `src/tapeOptions.ts`: alle auswählbaren Kassettenbilder sowie die vier Seitenfarben. Neue Optionen brauchen eine dauerhafte, eindeutige `id`.
+- `src/components/tape/Tape.tsx`: Reihenfolge und Position der Bildschichten der Kassette. Änderungen an `.tape-stage` und den Reel-Werten beeinflussen deren Proportionen und sollten nur zusammen mit den Originalmaßen 1963 × 1403 geändert werden.
+- `src/components/editor/TapeEditor.tsx`: Aufbau und Reihenfolge der Felder im rechten Formular.
+- `src/components/player/PlayButton.tsx`: Verhalten und JSX des Play-Bereichs; `SpotifyTrackInfo.tsx` zeigt Songdaten.
+- `src/app/App.tsx`: setzt Header, Kassette, Player und Editor zur ganzen Seite zusammen und reicht die gewählte Seitenfarbe als CSS-Variablen weiter.
+
+Die lokale Spotify-Simulation steckt in `src/components/dev/SpotifyPreviewToggle.tsx`. Weil sie nur bei `pnpm dev` gerendert wird, muss sie vor einem Deployment nicht gelöscht werden. Zum vollständigen Entfernen genügen der Import und `<SpotifyPreviewToggle />` in `TapeEditor.tsx` sowie diese eine Datei.
 
 Manuell testen:
 

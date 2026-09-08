@@ -11,6 +11,7 @@ export function PlayButton() {
   const trackId = parseSpotifyTrackId(spotifyUrl);
   const player = useSpotifyPlayer();
   const active = player.isPlaying || player.isStarting || player.isPreviewPlaying;
+  const connected = player.isConnected || player.isDemoMode;
   const empty = !spotifyUrl.trim();
   const previewTimer = useRef<number | null>(null);
   const stopPreviewSound = useRef<(() => void) | null>(null);
@@ -44,13 +45,13 @@ export function PlayButton() {
   const click = () => {
     if (player.isPreviewPlaying) { stopPreview(); return; }
     if (active) { void player.pause(); return; }
-    if (empty) { useSpotifyStore.setState({ isPreviewPlaying: true }); return; }
+    if (empty || player.isDemoMode) { preview(); return; }
     if (!trackId) return;
     if (!player.isConnected) { void player.login(); return; }
     if (!player.isReady) { void player.reconnect(); return; }
     void player.play(trackId);
   };
-  const label = active ? "Wiedergabe pausieren" : empty ? "Spulenanimation starten" : !player.isConnected ? "Spotify verbinden" : !player.isReady ? "Spotify-Player verbinden" : "Song abspielen";
+  const label = active ? "Wiedergabe pausieren" : empty ? "Spulenanimation starten" : !connected ? "Spotify verbinden" : !player.isDemoMode && !player.isReady ? "Spotify-Player verbinden" : "Song abspielen";
 
   return <div className="transport-wrap">
     <div className={`transport-deck ${active ? "is-running" : ""}`}>
@@ -67,20 +68,14 @@ export function PlayButton() {
       <span className="transport-deck__lamp" aria-hidden="true" />
       <span className="transport-deck__mode" aria-hidden="true">AUTO STOP</span>
     </div>
-    <span className="transport-label" role="status">{player.isConnecting ? "Player wird verbunden …" : player.isStarting ? "Kassette startet …" : player.isPlaying ? "playing" : empty ? "Design-Vorschau · ohne Audio" : label}</span>
-    {trackId && <div className="spotify-connection">
-      {!player.isConnected ? <>
-        <button className="text-button" type="button" onClick={() => void player.login()}>Mit Spotify verbinden</button>
-        <span>Für Audio in Side A brauchst du Spotify Premium.</span>
-      </> : <div className="action-row">
+    <span className="transport-label" role="status">{player.isConnecting ? "verbindet" : player.isStarting ? "startet" : active ? "playing" : player.isDemoMode ? "simulation" : "ready"}</span>
+    {trackId && !player.isDemoMode && <div className="spotify-connection">
+      {!player.isConnected ? <button className="text-button" type="button" onClick={() => void player.login()}>Spotify verbinden</button>
+      : <div className="action-row">
         {!player.isReady && <button className="text-button" disabled={player.isConnecting} type="button" onClick={() => void player.reconnect()}>Player erneut verbinden</button>}
         <button className="text-button" type="button" onClick={player.disconnect}>Spotify trennen</button>
       </div>}
-      {player.isReady && <span>Play startet diesen Song hier und löst die Wiedergabe auf anderen Geräten ab.</span>}
     </div>}
-    {!player.isConnected && trackId && <button className="preview-button" type="button" onClick={preview}>
-      {player.isPreviewPlaying ? "Vorschau stoppen" : "Mechanik ohne Spotify testen"}
-    </button>}
     <div className="player-feedback">
       {player.error ? <p className="player-message field-help--error" role="alert">{player.error}</p>
         : player.notice ? <p className="player-message" role="status">{player.notice}</p> : null}

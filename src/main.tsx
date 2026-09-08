@@ -10,6 +10,7 @@ async function start() {
     root.render(<main className="app-shell"><p className="route-error" role="status">Spotify wird verbunden. Deine Kassette wird wiederhergestellt …</p></main>);
     const result = await finishSpotifyLogin();
     window.history.replaceState(null, "", result.returnTo);
+    root.render(<StrictMode><App initialDraft={result.draft} authNotice={result.error ?? "Spotify ist verbunden."} /></StrictMode>);
   } else root.render(<StrictMode><App /></StrictMode>);
 }
 void start().catch(() => {

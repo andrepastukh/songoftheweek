@@ -1,5 +1,5 @@
 import { AlertTriangle, SlidersHorizontal } from "lucide-react";
-import { useLayoutEffect, useState } from "react";
+import { type CSSProperties, useLayoutEffect, useState } from "react";
 import { PlayButton } from "../components/player/PlayButton";
 import { Tape } from "../components/tape/Tape";
 import { TapeEditor } from "../components/editor/TapeEditor";
@@ -8,14 +8,21 @@ import { useTapeStore } from "../state/tapeStore";
 import { tapeFromHash } from "../utils/shareState";
 import { SpotifyTrackInfo } from "../components/player/SpotifyTrackInfo";
 import { resetPlayback } from "../services/spotifyPlayer";
+import { PAGE_BACKGROUND_OPTIONS } from "../tapeOptions";
 
 export function App({ initialDraft, authNotice }: { initialDraft?: unknown; authNotice?: string }) {
   const editorOpen = useTapeStore((state) => state.editorOpen);
   const sharedMode = useTapeStore((state) => state.sharedMode);
   const setEditorOpen = useTapeStore((state) => state.setEditorOpen);
   const hydrateSharedTape = useTapeStore((state) => state.hydrateSharedTape);
+  const pageBackgroundId = useTapeStore((state) => state.pageBackgroundId);
   const [linkError, setLinkError] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
+  const pageBackground = PAGE_BACKGROUND_OPTIONS.find((option) => option.id === pageBackgroundId) ?? PAGE_BACKGROUND_OPTIONS[0];
+  const pageStyle = {
+    "--page-background": pageBackground.color,
+    "--halftone-ink": pageBackground.halftone,
+  } as CSSProperties;
 
   useLayoutEffect(() => {
     let firstLoad = true;
@@ -36,7 +43,7 @@ export function App({ initialDraft, authNotice }: { initialDraft?: unknown; auth
   }, [hydrateSharedTape, initialDraft]);
 
   return (
-    <main className={`app-shell ${sharedMode ? "shared-mode" : "create-mode"}`}>
+    <main className={`app-shell ${sharedMode ? "shared-mode" : "create-mode"}`} style={pageStyle}>
       <div className="paper-grain" aria-hidden="true" />
       <AppHeader />
       {authNotice && <div className="auth-notice" role="status">{authNotice}</div>}

@@ -1,5 +1,5 @@
 import type { TapeDesign } from "../types";
-import { isBackgroundId, isDesignId, isTextColorId } from "../tapeOptions";
+import { DEFAULT_PAGE_BACKGROUND_ID, isBackgroundId, isDesignId, isPageBackgroundId, isTextColorId } from "../tapeOptions";
 import { isSpotifyTrackId, parseSpotifyTrackId } from "./spotifyUrl";
 
 export function isRecord(value: unknown): value is Record<string, unknown> {
@@ -10,12 +10,14 @@ export function parseTapeDesign(value: unknown): TapeDesign {
   if (!isRecord(value) || typeof value.spotifyTrackId !== "string" ||
     !isSpotifyTrackId(value.spotifyTrackId) || typeof value.message !== "string" ||
     value.message.length > 180 || !isBackgroundId(value.backgroundId) ||
-    !isDesignId(value.designId) || !isTextColorId(value.textColorId)) {
+    !isDesignId(value.designId) || !isTextColorId(value.textColorId) ||
+    (value.pageBackgroundId !== undefined && !isPageBackgroundId(value.pageBackgroundId))) {
     throw new Error("Bitte Song, Nachricht und Kassettendesign überprüfen.");
   }
   return {
     spotifyTrackId: value.spotifyTrackId, message: value.message,
     backgroundId: value.backgroundId, designId: value.designId, textColorId: value.textColorId,
+    pageBackgroundId: isPageBackgroundId(value.pageBackgroundId) ? value.pageBackgroundId : DEFAULT_PAGE_BACKGROUND_ID,
   };
 }
 

@@ -14,8 +14,8 @@ export function useSpotifyPlayer() {
   }, []);
 
   const login = async () => {
-    const { spotifyUrl, message, backgroundId, designId, textColorId, editorOpen, sharedMode } = useTapeStore.getState();
-    try { await loginSpotify({ spotifyUrl, message, backgroundId, designId, textColorId, editorOpen, sharedMode }); }
+    const { spotifyUrl, message, backgroundId, designId, textColorId, pageBackgroundId, editorOpen, sharedMode } = useTapeStore.getState();
+    try { await loginSpotify({ spotifyUrl, message, backgroundId, designId, textColorId, pageBackgroundId, editorOpen, sharedMode }); }
     catch (error) { useSpotifyStore.setState({ error: error instanceof Error ? error.message : "Spotify konnte nicht verbunden werden." }); }
   };
   return { ...state, login, play: playTape, pause: pauseTape, reconnect: connectPlayer, disconnect: disconnectPlayer };

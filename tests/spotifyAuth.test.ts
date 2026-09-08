@@ -29,7 +29,7 @@ describe("Spotify PKCE", () => {
     expect(url.origin).toBe("http://127.0.0.1:5173");
     expect(url.pathname).toBe("/");
     const { tapeFromHash } = await import("../src/utils/shareState");
-    expect(tapeFromHash(url.hash).tape).toEqual({ spotifyTrackId: "7JvyTnuwm1n1BryNAOVZZU", message: "Für dich 💚", backgroundId: "cyan", designId: "herbs", textColorId: "white", schemaVersion: 1 });
+    expect(tapeFromHash(url.hash).tape).toEqual({ spotifyTrackId: "7JvyTnuwm1n1BryNAOVZZU", message: "Für dich 💚", backgroundId: "cyan", designId: "herbs", textColorId: "white", pageBackgroundId: "paper", schemaVersion: 2 });
     expect(values.has("side-a.spotify.pending")).toBe(false);
   });
   it("does not transfer a draft between unrelated origins", async () => {

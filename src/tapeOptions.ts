@@ -38,13 +38,22 @@ export const TEXT_COLOR_OPTIONS = [
   },
 ] as const;
 
+export const PAGE_BACKGROUND_OPTIONS = [
+  { id: "paper", label: "Papier", color: "#ece7dc", halftone: "#3e4038" },
+  { id: "butter", label: "Buttergelb", color: "#e5d69e", halftone: "#625b38" },
+  { id: "powder-blue", label: "Puderblau", color: "#bfd4d5", halftone: "#385d60" },
+  { id: "dusty-pink", label: "Altrosa", color: "#d9b8af", halftone: "#70463e" },
+] as const;
+
 export type BackgroundId = (typeof BACKGROUND_OPTIONS)[number]["id"];
 export type DesignId = (typeof DESIGN_OPTIONS)[number]["id"];
 export type TextColorId = (typeof TEXT_COLOR_OPTIONS)[number]["id"];
+export type PageBackgroundId = (typeof PAGE_BACKGROUND_OPTIONS)[number]["id"];
 
 export const DEFAULT_BACKGROUND_ID: BackgroundId = "white";
 export const DEFAULT_DESIGN_ID: DesignId = "lines-3";
 export const DEFAULT_TEXT_COLOR_ID: TextColorId = "black";
+export const DEFAULT_PAGE_BACKGROUND_ID: PageBackgroundId = "paper";
 
 export function isBackgroundId(value: unknown): value is BackgroundId {
   return BACKGROUND_OPTIONS.some((option) => option.id === value);
@@ -56,4 +65,8 @@ export function isDesignId(value: unknown): value is DesignId {
 
 export function isTextColorId(value: unknown): value is TextColorId {
   return TEXT_COLOR_OPTIONS.some((option) => option.id === value);
+}
+
+export function isPageBackgroundId(value: unknown): value is PageBackgroundId {
+  return PAGE_BACKGROUND_OPTIONS.some((option) => option.id === value);
 }

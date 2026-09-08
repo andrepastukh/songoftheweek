@@ -3,24 +3,29 @@ import { useTapeStore } from "../../state/tapeStore";
 import {
   BACKGROUND_OPTIONS,
   DESIGN_OPTIONS,
+  PAGE_BACKGROUND_OPTIONS,
   TEXT_COLOR_OPTIONS,
   type BackgroundId,
   type DesignId,
+  type PageBackgroundId,
   type TextColorId,
 } from "../../tapeOptions";
 import { ShareButton } from "./ShareButton";
 import { SpotifyInput } from "./SpotifyInput";
+import { SpotifyPreviewToggle } from "../dev/SpotifyPreviewToggle";
 
 export function TapeEditor() {
   const message = useTapeStore((state) => state.message);
   const backgroundId = useTapeStore((state) => state.backgroundId);
   const designId = useTapeStore((state) => state.designId);
   const textColorId = useTapeStore((state) => state.textColorId);
+  const pageBackgroundId = useTapeStore((state) => state.pageBackgroundId);
   const sharedMode = useTapeStore((state) => state.sharedMode);
   const setMessage = useTapeStore((state) => state.setMessage);
   const setBackgroundId = useTapeStore((state) => state.setBackgroundId);
   const setDesignId = useTapeStore((state) => state.setDesignId);
   const setTextColorId = useTapeStore((state) => state.setTextColorId);
+  const setPageBackgroundId = useTapeStore((state) => state.setPageBackgroundId);
   const setEditorOpen = useTapeStore((state) => state.setEditorOpen);
 
   return (
@@ -72,6 +77,15 @@ export function TapeEditor() {
               ))}
             </select>
           </label>
+
+          <label className="tape-option">
+            <span>Seitenfarbe</span>
+            <select value={pageBackgroundId} onChange={(event) => setPageBackgroundId(event.target.value as PageBackgroundId)}>
+              {PAGE_BACKGROUND_OPTIONS.map((option) => (
+                <option key={option.id} value={option.id}>{option.label}</option>
+              ))}
+            </select>
+          </label>
         </div>
       </div>
 
@@ -84,6 +98,7 @@ export function TapeEditor() {
       </div>
 
       <ShareButton />
+      <SpotifyPreviewToggle />
     </aside>
   );
 }

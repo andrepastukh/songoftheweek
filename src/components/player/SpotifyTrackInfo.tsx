@@ -7,10 +7,11 @@ import { getSpotifyTrack, type SpotifyTrack } from "../../services/spotify";
 export function SpotifyTrackInfo() {
   const id = parseSpotifyTrackId(useTapeStore(state => state.spotifyUrl));
   const connected = useSpotifyStore(state => state.isConnected);
+  const demo = useSpotifyStore(state => state.isDemoMode);
   const [result, setResult] = useState<{ id: string; track?: SpotifyTrack; error?: string } | null>(null);
   const [attempt, setAttempt] = useState(0);
   useEffect(() => {
-    if (!id || !connected) { setResult(null); return; }
+    if (!id || !connected || demo) { setResult(null); return; }
     const controller = new AbortController();
     const timer = window.setTimeout(() => {
       void getSpotifyTrack(id, controller.signal).then(track => {
@@ -20,8 +21,16 @@ export function SpotifyTrackInfo() {
       });
     }, 300);
     return () => { window.clearTimeout(timer); controller.abort(); };
-  }, [id, connected, attempt]);
+  }, [id, connected, demo, attempt]);
   if (!id) return null;
+  if (demo) return <div className="track-info track-info--demo">
+    <span className="track-info__demo-cover" aria-hidden="true">A</span>
+    <div>
+      <strong>Ausgewählter Spotify-Song</strong>
+      <span>Testverbindung aktiv</span>
+      <a href={`https://open.spotify.com/track/${id}`} target="_blank" rel="noopener noreferrer">Auf Spotify öffnen ↗</a>
+    </div>
+  </div>;
   const current = result?.id === id && connected ? result : null;
   return <div className="track-info">
     {current?.track?.cover && <img src={current.track.cover} alt={`Albumcover zu ${current.track.title}`} />}
