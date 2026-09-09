@@ -13,6 +13,17 @@
   --ink: #20231f;
   --muted: #77786f;
   --line: rgba(29, 31, 27, 0.14);
+
+  /* Central positioning controls for the cassette/player composition. */
+  --tape-offset-x: 4.6vw;
+  --player-dock-offset-y: -30px;
+  --spotify-embed-offset-y: -34px;
+  --transport-offset-y: 70px;
+
+  /* Halftone: larger grid = fewer dots; larger dot/opacity = stronger pattern. */
+  --halftone-grid: 5px;
+  --halftone-dot: 0.75px;
+  --halftone-opacity: 0.22;
 }
 
 .share-result { display: grid; gap: 10px; margin-top: 16px; font-size: 11px; }
@@ -30,18 +41,36 @@
 .track-info strong { font-weight: 600; }
 .track-info span { color: var(--muted); }
 .track-info__demo-cover { display: grid; width: 48px; height: 48px; flex: 0 0 48px; place-items: center; border: 1px solid rgba(31,32,28,.24); color: #e9e4d8 !important; background: #292b27; font-family: "Plaster", sans-serif; font-size: 23px; }
-.auth-notice { position: fixed; z-index: 21; top: 82px; left: 50%; width: min(700px, calc(100vw - 32px)); padding: 8px 20px; font-size: 12px; text-align: center; background: var(--paper); transform: translateX(-50%); }
 .transport-button:disabled, .text-button:disabled { opacity: .45; cursor: default; }
 .editor-panel { max-height: calc(100dvh - 145px); overflow-y: auto; }
 .route-error a { color: inherit; margin-left: 12px; }
 
 .spotify-track-slot {
+  position: absolute;
+  top: var(--spotify-embed-offset-y);
+  left: 0;
   width: 100%;
-  height: 70px;
+  padding: 4px;
+  height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+}
+
+.spotify-embed-wrap {
+  width: min(92vw, 420px);
+  height: 80px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.spotify-embed,
+.spotify-embed iframe {
+  display: block;
+  width: 100%;
+  height: 80px;
+  border: 0;
 }
 
 @media (max-width: 800px) {
@@ -106,9 +135,9 @@ a:focus-visible {
   z-index: -2;
   content: "";
   pointer-events: none;
-  background-image: radial-gradient(circle, var(--halftone-ink) 0 .75px, transparent .9px);
-  background-size: 5px 5px;
-  opacity: 0.22;
+  background-image: radial-gradient(circle, var(--halftone-ink) 0 var(--halftone-dot), transparent calc(var(--halftone-dot) + .15px));
+  background-size: var(--halftone-grid) var(--halftone-grid);
+  opacity: var(--halftone-opacity);
   mask-image: linear-gradient(to bottom, #000, transparent 88%);
 }
 
@@ -236,12 +265,10 @@ a:focus-visible {
 }
 
 .player-dock {
-  display: grid;
+  position: relative;
   width: 100%;
   height: 190px;
-  grid-template-rows: 70px 144px;
-  justify-items: center;
-  transform: translateY(-20px);
+  transform: translateY(var(--player-dock-offset-y));
 }
 
 .create-mode .has-editor .hero-zone {
@@ -271,7 +298,7 @@ a:focus-visible {
   flex: 0 0 auto;
   aspect-ratio: 1963 / 1403;
   margin: 0;
-  margin-left: 4.6vw;
+  margin-left: var(--tape-offset-x);
   container-type: inline-size;
   user-select: none;
 }
@@ -404,7 +431,9 @@ a:focus-visible {
 }
 
 .transport-wrap {
-  position: relative;
+  position: absolute;
+  top: var(--transport-offset-y);
+  left: 0;
   display: flex;
   width: 100%;
   height: 144px;
@@ -922,6 +951,8 @@ a:focus-visible {
 }
 
 @media (max-width: 800px) {
+  :root { --tape-offset-x: 12vw; }
+
   .app-shell {
     height: 100dvh;
     overflow-y: auto;
@@ -967,7 +998,6 @@ a:focus-visible {
   .tape-stage {
     width: min(93vw, 650px);
     max-height: none;
-    margin-left: 12vw;
   }
 
   .transport-wrap {
@@ -1041,6 +1071,8 @@ a:focus-visible {
 }
 
 @media (max-width: 480px) {
+  :root { --tape-offset-x: -1vw; }
+
   .wordmark {
     gap: 9px;
     font-size: 11px;
@@ -1073,7 +1105,6 @@ a:focus-visible {
 
   .tape-stage {
     width: 94vw;
-    margin-left: -1vw;
   }
 
   .hero-kicker {
@@ -1092,6 +1123,11 @@ a:focus-visible {
 }
 
 @media (max-height: 760px) and (min-width: 801px) {
+  :root {
+    --spotify-embed-offset-y: -42px;
+    --transport-offset-y: 42px;
+  }
+
   .app-header {
     height: 80px;
   }
@@ -1131,11 +1167,6 @@ a:focus-visible {
 
   .player-dock {
     height: 188px;
-    grid-template-rows: 42px 146px;
-  }
-
-  .spotify-track-slot {
-    height: 42px;
   }
 
   .transport-wrap {

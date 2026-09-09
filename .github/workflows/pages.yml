@@ -25,9 +25,6 @@ jobs:
       - uses: actions/configure-pages@v5
       - run: pnpm build
         env:
-          VITE_SPOTIFY_CLIENT_ID: ${{ vars.VITE_SPOTIFY_CLIENT_ID }}
-          VITE_SPOTIFY_REDIRECT_URI: ${{ vars.VITE_SPOTIFY_REDIRECT_URI }}
-          VITE_SPOTIFY_PLAYBACK_DELAY_MS: ${{ vars.VITE_SPOTIFY_PLAYBACK_DELAY_MS || '900' }}
           VITE_CASSETTE_START_SOUND_URL: ${{ vars.VITE_CASSETTE_START_SOUND_URL }}
       - uses: actions/upload-pages-artifact@v4
         with:

@@ -7,10 +7,10 @@ import { AppHeader } from "../components/layout/AppHeader";
 import { useTapeStore } from "../state/tapeStore";
 import { tapeFromHash } from "../utils/shareState";
 import { SpotifyTrackInfo } from "../components/player/SpotifyTrackInfo";
-import { resetPlayback } from "../services/spotifyPlayer";
+import { pauseSpotifyEmbed } from "../services/spotifyEmbed";
 import { PAGE_BACKGROUND_OPTIONS } from "../tapeOptions";
 
-export function App({ initialDraft, authNotice }: { initialDraft?: unknown; authNotice?: string }) {
+export function App() {
   const editorOpen = useTapeStore((state) => state.editorOpen);
   const sharedMode = useTapeStore((state) => state.sharedMode);
   const setEditorOpen = useTapeStore((state) => state.setEditorOpen);
@@ -25,29 +25,24 @@ export function App({ initialDraft, authNotice }: { initialDraft?: unknown; auth
   } as CSSProperties;
 
   useLayoutEffect(() => {
-    let firstLoad = true;
     const loadTapeFromUrl = () => {
-      resetPlayback();
+      pauseSpotifyEmbed();
       const route = tapeFromHash();
       setLinkError(route.corrupted);
       if (route.tape) hydrateSharedTape(route.tape);
       else if (!route.corrupted) useTapeStore.setState({ sharedMode: false });
-      if (firstLoad && initialDraft) useTapeStore.getState().restoreDraft(initialDraft);
-      firstLoad = false;
       setIsHydrated(true);
     };
 
     loadTapeFromUrl();
     window.addEventListener("hashchange", loadTapeFromUrl);
     return () => window.removeEventListener("hashchange", loadTapeFromUrl);
-  }, [hydrateSharedTape, initialDraft]);
+  }, [hydrateSharedTape]);
 
   return (
     <main className={`app-shell ${sharedMode ? "shared-mode" : "create-mode"}`} style={pageStyle}>
       <div className="paper-grain" aria-hidden="true" />
       <AppHeader />
-      {authNotice && <div className="auth-notice" role="status">{authNotice}</div>}
-
       {linkError && (
         <div className="route-error" role="status">
           <AlertTriangle size={16} /> Dieser Tape-Link ist unvollständig oder beschädigt.

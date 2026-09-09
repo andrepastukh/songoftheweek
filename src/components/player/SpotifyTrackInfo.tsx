@@ -1,27 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useTapeStore } from "../../state/tapeStore";
 import { useSpotifyStore } from "../../state/spotifyStore";
 import { parseSpotifyTrackId } from "../../utils/spotifyUrl";
-import { getSpotifyTrack, type SpotifyTrack } from "../../services/spotify";
+import { mountSpotifyEmbed } from "../../services/spotifyEmbed";
 
 export function SpotifyTrackInfo() {
   const id = parseSpotifyTrackId(useTapeStore(state => state.spotifyUrl));
-  const connected = useSpotifyStore(state => state.isConnected);
   const demo = useSpotifyStore(state => state.isDemoMode);
-  const [result, setResult] = useState<{ id: string; track?: SpotifyTrack; error?: string } | null>(null);
-  const [attempt, setAttempt] = useState(0);
+  const host = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    if (!id || !connected || demo) { setResult(null); return; }
-    const controller = new AbortController();
-    const timer = window.setTimeout(() => {
-      void getSpotifyTrack(id, controller.signal).then(track => {
-        if (!controller.signal.aborted) setResult({ id, track });
-      }).catch(error => {
-        if (!controller.signal.aborted) setResult({ id, error: error instanceof Error ? error.message : "Songdetails konnten nicht geladen werden." });
-      });
-    }, 300);
-    return () => { window.clearTimeout(timer); controller.abort(); };
-  }, [id, connected, demo, attempt]);
+    if (!id || demo || !host.current) return;
+    let cleanup: (() => void) | undefined;
+    let disposed = false;
+    void mountSpotifyEmbed(host.current, id).then(result => {
+      if (disposed) result();
+      else cleanup = result;
+    }).catch(error => {
+      if (!disposed) {
+        const message = error instanceof Error ? error.message : "Der Spotify-Player konnte nicht geladen werden.";
+        useSpotifyStore.setState({ isConnecting: false, error: message });
+      }
+    });
+    return () => { disposed = true; cleanup?.(); };
+  }, [id, demo]);
+
   if (!id) return null;
   if (demo) return <div className="track-info track-info--demo">
     <span className="track-info__demo-cover" aria-hidden="true">A</span>
@@ -30,15 +33,7 @@ export function SpotifyTrackInfo() {
       <a href={`https://open.spotify.com/track/${id}`} target="_blank" rel="noopener noreferrer">Auf Spotify öffnen ↗</a>
     </div>
   </div>;
-  const current = result?.id === id && connected ? result : null;
-  return <div className="track-info">
-    {current?.track?.cover && <img src={current.track.cover} alt={`Albumcover zu ${current.track.title}`} />}
-    <div>
-      {current?.track && <><strong>{current.track.title}</strong><span>{current.track.artist}</span></>}
-      <a href={`https://open.spotify.com/track/${id}`} target="_blank" rel="noopener noreferrer">Auf Spotify öffnen ↗</a>
-      {connected && !current && <span role="status">Songdetails werden geladen …</span>}
-      {current?.track && !current.track.playable && <span role="alert">Dieser Song ist für dein Konto nicht verfügbar.</span>}
-      {current?.error && <span className="field-help--error" role="alert">{current.error}</span>}
-    </div>
+  return <div className="spotify-embed-wrap">
+    <div ref={host} className="spotify-embed" aria-label="Spotify-Player" />
   </div>;
 }

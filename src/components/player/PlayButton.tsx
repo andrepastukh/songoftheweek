@@ -3,15 +3,14 @@ import { useEffect, useRef } from "react";
 import { useTapeStore } from "../../state/tapeStore";
 import { useSpotifyStore } from "../../state/spotifyStore";
 import { parseSpotifyTrackId } from "../../utils/spotifyUrl";
-import { useSpotifyPlayer } from "../../hooks/useSpotifyPlayer";
 import { startCassetteSound } from "../../services/cassetteSound";
+import { pauseSpotifyEmbed, playSpotifyEmbed } from "../../services/spotifyEmbed";
 
 export function PlayButton() {
   const spotifyUrl = useTapeStore(state => state.spotifyUrl);
   const trackId = parseSpotifyTrackId(spotifyUrl);
-  const player = useSpotifyPlayer();
+  const player = useSpotifyStore();
   const active = player.isPlaying || player.isStarting || player.isPreviewPlaying;
-  const connected = player.isConnected || player.isDemoMode;
   const empty = !spotifyUrl.trim();
   const previewTimer = useRef<number | null>(null);
   const stopPreviewSound = useRef<(() => void) | null>(null);
@@ -44,14 +43,14 @@ export function PlayButton() {
 
   const click = () => {
     if (player.isPreviewPlaying) { stopPreview(); return; }
-    if (active) { void player.pause(); return; }
+    if (active) { pauseSpotifyEmbed(); return; }
     if (empty || player.isDemoMode) { preview(); return; }
     if (!trackId) return;
-    if (!player.isConnected) { void player.login(); return; }
-    if (!player.isReady) { void player.reconnect(); return; }
-    void player.play(trackId);
+    if (!player.isReady) return;
+    if (player.isPlaying) pauseSpotifyEmbed();
+    else playSpotifyEmbed();
   };
-  const label = active ? "Wiedergabe pausieren" : empty ? "Spulenanimation starten" : !connected ? "Spotify verbinden" : !player.isDemoMode && !player.isReady ? "Spotify-Player verbinden" : "Song abspielen";
+  const label = active ? "Wiedergabe pausieren" : empty ? "Spulenanimation starten" : !player.isReady ? "Spotify wird geladen" : "Song abspielen";
 
   return <div className="transport-wrap">
     <div className={`transport-deck ${active ? "is-running" : ""}`}>
@@ -59,7 +58,7 @@ export function PlayButton() {
       <span className="transport-deck__screw transport-deck__screw--right" aria-hidden="true" />
       <span className="transport-deck__meter" aria-hidden="true"><i /><i /><i /></span>
       <button className={`transport-button ${active ? "is-playing" : ""}`} type="button"
-        onClick={click} disabled={(!empty && !trackId) || player.isConnecting} aria-label={label} aria-pressed={active}>
+        onClick={click} disabled={(!empty && !trackId) || (!empty && !player.isDemoMode && !player.isReady)} aria-label={label} aria-pressed={active}>
         <span className="transport-button__top">
           {active ? <Pause size={19} strokeWidth={2} fill="currentColor" /> : <Play size={19} strokeWidth={2} fill="currentColor" />}
         </span>
@@ -68,14 +67,7 @@ export function PlayButton() {
       <span className="transport-deck__lamp" aria-hidden="true" />
       <span className="transport-deck__mode" aria-hidden="true">AUTO STOP</span>
     </div>
-    <span className="transport-label" role="status">{player.isConnecting ? "verbindet" : player.isStarting ? "startet" : active ? "playing" : player.isDemoMode ? "simulation" : "ready"}</span>
-    {trackId && !player.isDemoMode && <div className="spotify-connection">
-      {!player.isConnected ? <button className="text-button" type="button" onClick={() => void player.login()}>Spotify verbinden</button>
-      : <div className="action-row">
-        {!player.isReady && <button className="text-button" disabled={player.isConnecting} type="button" onClick={() => void player.reconnect()}>Player erneut verbinden</button>}
-        <button className="text-button" type="button" onClick={player.disconnect}>Spotify trennen</button>
-      </div>}
-    </div>}
+    <span className="transport-label" role="status">{player.isConnecting ? "verbindet" : player.isStarting ? "startet" : active ? "playing" : player.isDemoMode ? "simulation" : player.isReady ? "bereit" : player.isConnected ? "angemeldet" : "nicht verbunden"}</span>
     <div className="player-feedback">
       {player.error ? <p className="player-message field-help--error" role="alert">{player.error}</p>
         : player.notice ? <p className="player-message" role="status">{player.notice}</p> : null}

@@ -29,7 +29,7 @@ export function SpotifyInput() {
         {hasError
           ? "Bitte einen gültigen Spotify-Track-Link einfügen."
           : isValid
-            ? "Linkformat gültig. Songdetails erscheinen nach dem Verbinden mit Spotify."
+            ? "Linkformat gültig. Der öffentliche Spotify-Player ist bereit."
             : "Füge einen Spotify-Track-Link ein."}
       </p>
     </div>
