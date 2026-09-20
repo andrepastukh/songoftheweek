@@ -23,7 +23,7 @@
   /* Halftone: larger grid = fewer dots; larger dot/opacity = stronger pattern. */
   --halftone-grid: 5px;
   --halftone-dot: 0.75px;
-  --halftone-opacity: 0.22;
+  --halftone-opacity: 0.52;
 }
 
 .share-result { display: grid; gap: 10px; margin-top: 16px; font-size: 11px; }
@@ -123,8 +123,6 @@ a:focus-visible {
   overflow: hidden;
   isolation: isolate;
   background:
-    radial-gradient(circle at 20% 15%, rgba(255,255,255,0.48), transparent 34%),
-    radial-gradient(circle at 81% 78%, rgba(129,106,68,0.07), transparent 32%),
     var(--page-background);
   transition: background-color .25s ease;
 }
@@ -138,7 +136,7 @@ a:focus-visible {
   background-image: radial-gradient(circle, var(--halftone-ink) 0 var(--halftone-dot), transparent calc(var(--halftone-dot) + .15px));
   background-size: var(--halftone-grid) var(--halftone-grid);
   opacity: var(--halftone-opacity);
-  mask-image: linear-gradient(to bottom, #000, transparent 88%);
+  mask-image: radial-gradient(circle at center, #000 0%, transparent 88%);
 }
 
 .paper-grain {
