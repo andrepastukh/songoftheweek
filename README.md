@@ -64,12 +64,12 @@ Ein gültiges Linkformat ist noch kein Nachweis, dass der Song existiert oder be
 
 GitHub Pages hostet statische Dateien, keine Node-Server. Vite verwendet relative Build-Pfade; Grafiken und Logo berücksichtigen den App-Unterpfad. Die Hash-Routen benötigen keine Server-Rewrites oder 404-Tricks. [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages)
 
-Ein manuell auslösbarer Workflow liegt unter `.github/workflows/pages.yml`:
+Der Deployment-Workflow liegt unter `.github/workflows/pages.yml`:
 
 1. Änderungen ins Repository übernehmen.
 2. In Settings → Pages als Source **GitHub Actions** auswählen.
 3. Optional unter Settings → Secrets and variables → Actions → Variables `VITE_CASSETTE_START_SOUND_URL` hinterlegen.
-4. Unter Actions **Deploy Side A to GitHub Pages → Run workflow** starten. Der Workflow prüft Typen und Tests, baut die App und veröffentlicht ausschließlich `dist`.
+4. Jeder Push auf `main` startet das Deployment automatisch. Alternativ lässt sich unter Actions **Deploy Side A to GitHub Pages → Run workflow** ein manueller Lauf starten. Der Workflow prüft Typen und Tests, baut die App und veröffentlicht ausschließlich `dist`.
 
 Der Spotify Embed funktioniert ohne Spotify-Variablen. Diese Implementierung führt selbst kein Deployment aus. [GitHub Pages Workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)
 
