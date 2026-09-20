@@ -46,11 +46,10 @@ export function PlayButton() {
     if (active) { pauseSpotifyEmbed(); return; }
     if (empty || player.isDemoMode) { preview(); return; }
     if (!trackId) return;
-    if (!player.isReady) return;
     if (player.isPlaying) pauseSpotifyEmbed();
     else playSpotifyEmbed();
   };
-  const label = active ? "Wiedergabe pausieren" : empty ? "Spulenanimation starten" : !player.isReady ? "Spotify wird geladen" : "Song abspielen";
+  const label = active ? "Wiedergabe pausieren" : empty ? "Spulenanimation starten" : "Song abspielen";
 
   return <div className="transport-wrap">
     <div className={`transport-deck ${active ? "is-running" : ""}`}>
@@ -58,7 +57,7 @@ export function PlayButton() {
       <span className="transport-deck__screw transport-deck__screw--right" aria-hidden="true" />
       <span className="transport-deck__meter" aria-hidden="true"><i /><i /><i /></span>
       <button className={`transport-button ${active ? "is-playing" : ""}`} type="button"
-        onClick={click} disabled={(!empty && !trackId) || (!empty && !player.isDemoMode && !player.isReady)} aria-label={label} aria-pressed={active}>
+        onClick={click} disabled={!empty && !trackId} aria-label={label} aria-pressed={active}>
         <span className="transport-button__top">
           {active ? <Pause size={19} strokeWidth={2} fill="currentColor" /> : <Play size={19} strokeWidth={2} fill="currentColor" />}
         </span>

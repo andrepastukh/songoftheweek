@@ -53,9 +53,10 @@ function loadSpotifyIframeApi(): Promise<SpotifyIframeApi> {
   return apiRequest;
 }
 
-export async function mountSpotifyEmbed(element: HTMLElement, trackId: string): Promise<() => void> {
+export async function mountSpotifyEmbed(element: HTMLElement, trackId: string, signal?: AbortSignal): Promise<() => void> {
   useSpotifyStore.setState({ isConnecting: true, isConnected: false, isReady: false, isPlaying: false, error: "" });
   const api = await loadSpotifyIframeApi();
+  if (signal?.aborted) return () => {};
   let disposed = false;
   let mounted: EmbedController | null = null;
 

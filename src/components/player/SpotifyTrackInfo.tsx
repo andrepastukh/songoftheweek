@@ -11,9 +11,10 @@ export function SpotifyTrackInfo() {
 
   useEffect(() => {
     if (!id || demo || !host.current) return;
+    const abortController = new AbortController();
     let cleanup: (() => void) | undefined;
     let disposed = false;
-    void mountSpotifyEmbed(host.current, id).then(result => {
+    void mountSpotifyEmbed(host.current, id, abortController.signal).then(result => {
       if (disposed) result();
       else cleanup = result;
     }).catch(error => {
@@ -22,7 +23,7 @@ export function SpotifyTrackInfo() {
         useSpotifyStore.setState({ isConnecting: false, error: message });
       }
     });
-    return () => { disposed = true; cleanup?.(); };
+    return () => { disposed = true; abortController.abort(); cleanup?.(); };
   }, [id, demo]);
 
   if (!id) return null;

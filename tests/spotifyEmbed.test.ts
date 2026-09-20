@@ -10,6 +10,7 @@ describe("public Spotify Embed", () => {
   beforeEach(() => {
     vi.resetModules();
     vi.resetAllMocks();
+    options = undefined;
     events = new Map();
     const controller = {
       addListener: (event: string, callback: (value: unknown) => void) => events.set(event, callback),
@@ -42,15 +43,30 @@ describe("public Spotify Embed", () => {
       width: "100%",
       height: 80,
     });
-    events.get("ready")?.({});
+    // The transport must remain usable even when Spotify's ready event is
+    // delayed or never arrives. The controller already exists at this point.
     embed.playSpotifyEmbed();
     expect(play).toHaveBeenCalledOnce();
 
+    events.get("ready")?.({});
     events.get("playback_update")?.({ data: { isPaused: false, isBuffering: false, position: 100, duration: 1000 } });
     const { useSpotifyStore } = await import("../src/state/spotifyStore");
     expect(useSpotifyStore.getState()).toMatchObject({ isReady: true, isPlaying: true });
 
     cleanup();
     expect(destroy).toHaveBeenCalledOnce();
+  });
+
+  it("does not create a controller for an effect that was already replaced", async () => {
+    const embed = await import("../src/services/spotifyEmbed");
+    const abortController = new AbortController();
+    const mounting = embed.mountSpotifyEmbed({} as HTMLElement, "4uLU6hMCjMI75M1A2tKUQC", abortController.signal);
+
+    abortController.abort();
+    const cleanup = await mounting;
+
+    expect(options).toBeUndefined();
+    expect(destroy).not.toHaveBeenCalled();
+    cleanup();
   });
 });
