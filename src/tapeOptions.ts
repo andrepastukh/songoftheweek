@@ -39,10 +39,22 @@ export const TEXT_COLOR_OPTIONS = [
 ] as const;
 
 export const PAGE_BACKGROUND_OPTIONS = [
-  { id: "paper", label: "Papier", color: "#ece7dc", halftone: "#3e4038" },
-  { id: "butter", label: "Buttergelb", color: "#e5d69e", halftone: "#625b38" },
-  { id: "powder-blue", label: "Puderblau", color: "#bfd4d5", halftone: "#385d60" },
-  { id: "dusty-pink", label: "Altrosa", color: "#d9b8af", halftone: "#70463e" },
+  {
+    id: "paper", label: "Papier", color: "#ece7dc", halftone: "#3e4038",
+    ink: "#20231f", muted: "#74756c", panel: "rgba(242, 238, 228, .88)", control: "rgba(255, 255, 255, .32)", brandFilter: "none",
+  },
+  {
+    id: "grey", label: "Grau", color: "#6c757d", halftone: "#aeb6bd",
+    ink: "#fffaf0", muted: "#fffaf0", panel: "rgba(76, 84, 91, .9)", control: "rgba(255, 255, 255, .1)", brandFilter: "invert(1)",
+  },
+  {
+    id: "green", label: "Grün", color: "#84a98c", halftone: "#46634e",
+    ink: "#17231a", muted: "#344c39", panel: "rgba(151, 181, 157, .9)", control: "rgba(255, 255, 255, .2)", brandFilter: "none",
+  },
+  {
+    id: "dusty-pink", label: "Altrosa", color: "#d9b8af", halftone: "#70463e",
+    ink: "#2b1d1a", muted: "#654941", panel: "rgba(226, 199, 191, .9)", control: "rgba(255, 255, 255, .22)", brandFilter: "none",
+  },
 ] as const;
 
 export type BackgroundId = (typeof BACKGROUND_OPTIONS)[number]["id"];

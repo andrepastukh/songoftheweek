@@ -22,6 +22,11 @@ export function App() {
   const pageStyle = {
     "--page-background": pageBackground.color,
     "--halftone-ink": pageBackground.halftone,
+    "--ink": pageBackground.ink,
+    "--muted": pageBackground.muted,
+    "--panel-background": pageBackground.panel,
+    "--control-background": pageBackground.control,
+    "--brand-filter": pageBackground.brandFilter,
   } as CSSProperties;
 
   useLayoutEffect(() => {

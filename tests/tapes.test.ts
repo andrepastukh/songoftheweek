@@ -6,7 +6,7 @@ import { useTapeStore } from "../src/state/tapeStore";
 import type { TapeDesign } from "../src/types";
 
 const id = "4uLU6hMCjMI75M1A2tKUQC";
-const tape: TapeDesign = { spotifyTrackId: id, message: "  Für dich 💚\nSeite A  ", backgroundId: "cyan", designId: "herbs", textColorId: "white", pageBackgroundId: "powder-blue" };
+const tape: TapeDesign = { spotifyTrackId: id, message: "  Für dich 💚\nSeite A  ", backgroundId: "cyan", designId: "herbs", textColorId: "white", pageBackgroundId: "grey" };
 
 describe("Spotify links", () => {
   it.each([`https://open.spotify.com/track/${id}`, ` https://open.spotify.com/intl-de/track/${id}?si=foo `, `spotify:track:${id}`])("accepts %s", url => expect(parseSpotifyTrackId(url)).toBe(id));

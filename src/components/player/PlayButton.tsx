@@ -14,6 +14,20 @@ export function PlayButton() {
   const empty = !spotifyUrl.trim();
   const previewTimer = useRef<number | null>(null);
   const stopPreviewSound = useRef<(() => void) | null>(null);
+  const stopSongStartSound = useRef<(() => void) | null>(null);
+
+  const playStartSound = () => {
+    try {
+      const sound = startCassetteSound();
+      void sound.ready.catch(() => {
+        useSpotifyStore.setState({ error: "Der Kassettensound wurde vom Browser blockiert. Bitte noch einmal klicken." });
+      });
+      return sound.stop;
+    } catch {
+      useSpotifyStore.setState({ error: "Der Kassettensound ist in diesem Browser nicht verfügbar." });
+      return null;
+    }
+  };
 
   const stopPreview = () => {
     if (previewTimer.current !== null) window.clearTimeout(previewTimer.current);
@@ -23,31 +37,32 @@ export function PlayButton() {
     useSpotifyStore.setState({ isPreviewPlaying: false });
   };
 
-  useEffect(() => stopPreview, []);
+  useEffect(() => () => {
+    stopPreview();
+    stopSongStartSound.current?.();
+  }, []);
 
   const preview = () => {
     if (player.isPreviewPlaying) { stopPreview(); return; }
     stopPreview();
     useSpotifyStore.setState({ isPreviewPlaying: true, error: "", notice: "" });
-    try {
-      const sound = startCassetteSound();
-      stopPreviewSound.current = sound.stop;
-      void sound.ready.catch(() => {
-        useSpotifyStore.setState({ error: "Der Kassettensound wurde vom Browser blockiert. Bitte noch einmal klicken." });
-      });
-    } catch {
-      useSpotifyStore.setState({ error: "Der Kassettensound ist in diesem Browser nicht verfügbar." });
-    }
+    stopPreviewSound.current = playStartSound();
     previewTimer.current = window.setTimeout(stopPreview, 4_000);
   };
 
   const click = () => {
     if (player.isPreviewPlaying) { stopPreview(); return; }
-    if (active) { pauseSpotifyEmbed(); return; }
+    if (active) {
+      stopSongStartSound.current?.();
+      stopSongStartSound.current = null;
+      pauseSpotifyEmbed();
+      return;
+    }
     if (empty || player.isDemoMode) { preview(); return; }
     if (!trackId) return;
-    if (player.isPlaying) pauseSpotifyEmbed();
-    else playSpotifyEmbed();
+    stopSongStartSound.current?.();
+    stopSongStartSound.current = playStartSound();
+    playSpotifyEmbed();
   };
   const label = active ? "Wiedergabe pausieren" : empty ? "Spulenanimation starten" : "Song abspielen";
 

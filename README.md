@@ -44,7 +44,7 @@ Side A verwendet den offiziellen [Spotify Embed mit iFrame API](https://develope
 
 | Variable | Bedeutung |
 | --- | --- |
-| `VITE_CASSETTE_START_SOUND_URL` | Optionale eigene Sounddatei, z. B. `assets/audio/cassette-start.mp3`; leer verwendet synthetischen Klick |
+| `VITE_CASSETTE_START_SOUND_URL` | Optionale Ersatz-Sounddatei, z. B. `assets/audio/cassette-start.mp3`; leer verwendet `public/assets/tape/Tape Recorder SFX.mp3` |
 
 Alle `VITE_*`-Werte sind öffentlich und werden beim Build eingebettet. Sie eignen sich nicht für Secrets. Die eigene Sounddatei gehört z. B. nach `public/assets/audio/cassette-start.mp3`.
 
