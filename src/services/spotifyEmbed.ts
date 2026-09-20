@@ -28,6 +28,19 @@ declare global {
 let apiRequest: Promise<SpotifyIframeApi> | null = null;
 let activeController: EmbedController | null = null;
 
+const EMBED_PERMISSIONS = ["autoplay", "clipboard-write", "encrypted-media", "fullscreen", "picture-in-picture"];
+
+function grantEmbedPlaybackPermissions(element: HTMLElement) {
+  const iframe = element.querySelector?.("iframe");
+  if (!iframe) return;
+  const permissions = new Set(
+    (iframe.getAttribute("allow") ?? "").split(";").map(value => value.trim()).filter(Boolean),
+  );
+  EMBED_PERMISSIONS.forEach(permission => permissions.add(permission));
+  iframe.setAttribute("allow", [...permissions].join("; "));
+  iframe.setAttribute("allowfullscreen", "");
+}
+
 function loadSpotifyIframeApi(): Promise<SpotifyIframeApi> {
   if (apiRequest) return apiRequest;
   apiRequest = new Promise((resolve, reject) => {
@@ -54,7 +67,7 @@ function loadSpotifyIframeApi(): Promise<SpotifyIframeApi> {
 }
 
 export async function mountSpotifyEmbed(element: HTMLElement, trackId: string, signal?: AbortSignal): Promise<() => void> {
-  useSpotifyStore.setState({ isConnecting: true, isConnected: false, isReady: false, isPlaying: false, error: "" });
+  useSpotifyStore.setState({ isConnecting: true, isConnected: false, isReady: false, isPlaying: false, error: "", notice: "" });
   const api = await loadSpotifyIframeApi();
   if (signal?.aborted) return () => {};
   let disposed = false;
@@ -72,6 +85,7 @@ export async function mountSpotifyEmbed(element: HTMLElement, trackId: string, s
     mounted = controller;
     activeController?.destroy();
     activeController = controller;
+    grantEmbedPlaybackPermissions(element);
     controller.addListener("ready", () => {
       if (controller === activeController) {
         useSpotifyStore.setState({ isConnecting: false, isConnected: true, isReady: true, error: "" });
@@ -83,7 +97,13 @@ export async function mountSpotifyEmbed(element: HTMLElement, trackId: string, s
     controller.addListener("playback_update", event => {
       if (controller !== activeController || !event.data) return;
       const ended = typeof event.data.duration === "number" && event.data.duration > 0 && event.data.position === event.data.duration;
-      useSpotifyStore.setState({ isPlaying: !event.data.isPaused && !event.data.isBuffering && !ended });
+      const previewOnly = typeof event.data.duration === "number" && event.data.duration > 0 && event.data.duration < 30_000;
+      useSpotifyStore.setState({
+        isPlaying: !event.data.isPaused && !event.data.isBuffering && !ended,
+        notice: previewOnly
+          ? "Spotify stellt hier nur eine Kurzvorschau bereit. Für den ganzen Song bitte im Spotify-Player anmelden oder den Song dort öffnen."
+          : "",
+      });
     });
   });
 

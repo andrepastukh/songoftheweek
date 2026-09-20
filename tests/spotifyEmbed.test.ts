@@ -36,13 +36,20 @@ describe("public Spotify Embed", () => {
 
   it("loads a track without OAuth or an app allowlist", async () => {
     const embed = await import("../src/services/spotifyEmbed");
-    const cleanup = await embed.mountSpotifyEmbed({} as HTMLElement, "4uLU6hMCjMI75M1A2tKUQC");
+    const iframe = { getAttribute: vi.fn(() => "autoplay"), setAttribute: vi.fn() };
+    const host = { querySelector: vi.fn(() => iframe) } as unknown as HTMLElement;
+    const cleanup = await embed.mountSpotifyEmbed(host, "4uLU6hMCjMI75M1A2tKUQC");
 
     expect(options).toEqual({
       uri: "spotify:track:4uLU6hMCjMI75M1A2tKUQC",
       width: "100%",
       height: 80,
     });
+    expect(iframe.setAttribute).toHaveBeenCalledWith(
+      "allow",
+      "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture",
+    );
+    expect(iframe.setAttribute).toHaveBeenCalledWith("allowfullscreen", "");
     // The transport must remain usable even when Spotify's ready event is
     // delayed or never arrives. The controller already exists at this point.
     embed.playSpotifyEmbed();
@@ -55,6 +62,22 @@ describe("public Spotify Embed", () => {
 
     cleanup();
     expect(destroy).toHaveBeenCalledOnce();
+  });
+
+  it("explains when Spotify only provides a short preview", async () => {
+    const embed = await import("../src/services/spotifyEmbed");
+    const host = { querySelector: vi.fn(() => null) } as unknown as HTMLElement;
+    const cleanup = await embed.mountSpotifyEmbed(host, "4uLU6hMCjMI75M1A2tKUQC");
+
+    events.get("playback_update")?.({ data: { isPaused: false, isBuffering: false, position: 1_000, duration: 29_000 } });
+
+    const { useSpotifyStore } = await import("../src/state/spotifyStore");
+    expect(useSpotifyStore.getState()).toMatchObject({
+      isPlaying: true,
+      notice: expect.stringContaining("Kurzvorschau"),
+    });
+
+    cleanup();
   });
 
   it("does not create a controller for an effect that was already replaced", async () => {
