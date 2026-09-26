@@ -5,6 +5,7 @@ describe("public Spotify Embed", () => {
   let options: { uri: string; width: string; height: number } | undefined;
   const play = vi.fn();
   const pause = vi.fn();
+  const seek = vi.fn();
   const destroy = vi.fn();
 
   beforeEach(() => {
@@ -16,6 +17,7 @@ describe("public Spotify Embed", () => {
       addListener: (event: string, callback: (value: unknown) => void) => events.set(event, callback),
       play,
       pause,
+      seek,
       destroy,
     };
     const api = {
@@ -77,6 +79,19 @@ describe("public Spotify Embed", () => {
       notice: expect.stringContaining("Kurzvorschau"),
     });
 
+    cleanup();
+  });
+
+  it("seeks relative to Spotify state and clamps at both ends", async () => {
+    const embed = await import("../src/services/spotifyEmbed");
+    const cleanup = await embed.mountSpotifyEmbed({ querySelector: () => null } as unknown as HTMLElement, "4uLU6hMCjMI75M1A2tKUQC");
+
+    events.get("playback_update")?.({ data: { isPaused: false, position: 5_000, duration: 12_000 } });
+    embed.seekSpotifyEmbed(-10);
+    embed.seekSpotifyEmbed(20);
+
+    expect(seek).toHaveBeenNthCalledWith(1, 0);
+    expect(seek).toHaveBeenNthCalledWith(2, 12);
     cleanup();
   });
 

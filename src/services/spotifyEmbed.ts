@@ -1,13 +1,14 @@
 import { useSpotifyStore } from "../state/spotifyStore";
 
 type PlaybackUpdate = {
-  data?: { isPaused?: boolean; isBuffering?: boolean; position?: number; duration?: number };
+  data?: { isPaused?: boolean; isBuffering?: boolean; position?: number; duration?: number; playingURI?: string };
 };
 
 interface EmbedController {
   addListener(event: "ready" | "playback_started" | "playback_update", callback: (event: PlaybackUpdate) => void): void;
   play(): void;
   pause(): void;
+  seek?(seconds: number): void;
   destroy(): void;
 }
 
@@ -67,7 +68,10 @@ function loadSpotifyIframeApi(): Promise<SpotifyIframeApi> {
 }
 
 export async function mountSpotifyEmbed(element: HTMLElement, trackId: string, signal?: AbortSignal): Promise<() => void> {
-  useSpotifyStore.setState({ isConnecting: true, isConnected: false, isReady: false, isPlaying: false, error: "", notice: "" });
+  useSpotifyStore.setState({
+    isConnecting: true, isConnected: false, isReady: false, isPlaying: false,
+    positionMs: 0, durationMs: 0, playingUri: "", error: "", notice: "",
+  });
   const api = await loadSpotifyIframeApi();
   if (signal?.aborted) return () => {};
   let disposed = false;
@@ -100,6 +104,9 @@ export async function mountSpotifyEmbed(element: HTMLElement, trackId: string, s
       const previewOnly = typeof event.data.duration === "number" && event.data.duration > 0 && event.data.duration < 30_000;
       useSpotifyStore.setState({
         isPlaying: !event.data.isPaused && !event.data.isBuffering && !ended,
+        positionMs: typeof event.data.position === "number" ? event.data.position : 0,
+        durationMs: typeof event.data.duration === "number" ? event.data.duration : 0,
+        playingUri: event.data.playingURI ?? "",
         notice: previewOnly
           ? "Spotify stellt hier nur eine Kurzvorschau bereit. Für den ganzen Song bitte im Spotify-Player anmelden oder den Song dort öffnen."
           : "",
@@ -111,7 +118,10 @@ export async function mountSpotifyEmbed(element: HTMLElement, trackId: string, s
     disposed = true;
     if (mounted === activeController) activeController = null;
     mounted?.destroy();
-    useSpotifyStore.setState({ isConnecting: false, isConnected: false, isReady: false, isPlaying: false });
+    useSpotifyStore.setState({
+      isConnecting: false, isConnected: false, isReady: false, isPlaying: false,
+      positionMs: 0, durationMs: 0, playingUri: "",
+    });
   };
 }
 
@@ -126,4 +136,16 @@ export function playSpotifyEmbed() {
 export function pauseSpotifyEmbed() {
   activeController?.pause();
   useSpotifyStore.setState({ isPlaying: false });
+}
+
+export function seekSpotifyEmbed(deltaSeconds: number) {
+  if (!activeController?.seek) {
+    useSpotifyStore.setState({ notice: "Diese Spotify-Session unterstützt kein Spulen." });
+    return;
+  }
+  const { positionMs, durationMs } = useSpotifyStore.getState();
+  const upperBound = durationMs > 0 ? durationMs : Number.POSITIVE_INFINITY;
+  const nextPositionMs = Math.min(upperBound, Math.max(0, positionMs + deltaSeconds * 1_000));
+  activeController.seek(Math.floor(nextPositionMs / 1_000));
+  useSpotifyStore.setState({ positionMs: nextPositionMs, error: "", notice: "" });
 }

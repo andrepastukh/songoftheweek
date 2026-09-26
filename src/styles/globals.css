@@ -43,7 +43,7 @@
 .track-info strong { font-weight: 600; }
 .track-info span { color: var(--muted); }
 .track-info__demo-cover { display: grid; width: 48px; height: 48px; flex: 0 0 48px; place-items: center; border: 1px solid rgba(31,32,28,.24); color: #e9e4d8 !important; background: #292b27; font-family: "Plaster", sans-serif; font-size: 23px; }
-.transport-button:disabled, .text-button:disabled { opacity: .45; cursor: default; }
+.transport-button:disabled, .transport-control:disabled, .text-button:disabled { opacity: .38; cursor: default; }
 .editor-panel {
   max-height: calc(100dvh - 145px);
   overflow-y: auto;
@@ -496,9 +496,9 @@ a:focus-visible {
 
 .transport-deck {
   position: relative;
-  width: 174px;
-  height: 66px;
-  flex: 0 0 66px;
+  width: min(92vw, 310px);
+  height: 76px;
+  flex: 0 0 76px;
   border: 1px solid #3c3c37;
   border-radius: 5px;
   background:
@@ -509,9 +509,9 @@ a:focus-visible {
 
 .transport-deck::after {
   position: absolute;
-  right: 43px;
-  bottom: 10px;
-  left: 43px;
+  right: 16px;
+  bottom: 13px;
+  left: 16px;
   height: 1px;
   content: "";
   background: rgba(222,216,197,.12);
@@ -544,29 +544,33 @@ a:focus-visible {
 
 .transport-deck__meter {
   position: absolute;
-  top: 14px;
-  left: 18px;
+  top: 19px;
+  left: 19px;
   display: flex;
   gap: 3px;
 }
 
 .transport-deck__meter i {
-  width: 3px;
-  height: 23px;
+  width: 2px;
+  height: 22px;
   border-radius: 1px;
   background: #0a0b09;
   box-shadow: inset 0 1px rgba(255,255,255,.07);
 }
 
-.transport-deck.is-running .transport-deck__meter i:nth-child(2) { background: #706d56; }
-.transport-deck.is-running .transport-deck__meter i:nth-child(3) { background: #a34d32; }
+.transport-deck.is-running .transport-deck__meter i:nth-child(1) { background: #77786f; }
+.transport-deck.is-running .transport-deck__meter i:nth-child(2) { background: #77786f; }
+.transport-deck.is-running .transport-deck__meter i:nth-child(3) {
+  background: #c75534;
+  animation: transport-meter-blink .8s steps(1, end) infinite;
+}
 
 .transport-deck__lamp {
   position: absolute;
-  top: 17px;
-  right: 24px;
-  width: 7px;
-  height: 7px;
+  top: 23px;
+  right: 20px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: #391a13;
   box-shadow: inset 0 0 3px #0c0705;
@@ -575,24 +579,100 @@ a:focus-visible {
 .transport-deck.is-running .transport-deck__lamp {
   background: #d55a37;
   box-shadow: 0 0 7px rgba(213,90,55,.8);
+  animation: transport-lamp-blink .8s steps(1, end) infinite;
 }
 
 .transport-deck__mode {
   position: absolute;
-  right: 13px;
-  bottom: 12px;
+  right: 16px;
+  bottom: 5px;
   color: #8e8d83;
   font-size: 5px;
-  letter-spacing: .08em;
+  letter-spacing: .16em;
+}
+
+.transport-controls {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  height: 58px;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 7px;
+  padding-top: 7px;
+}
+
+.transport-control {
+  position: relative;
+  display: grid;
+  width: 55px;
+  height: 43px;
+  flex: 0 0 55px;
+  padding: 0 0 10px;
+  place-items: center;
+  border: 1px solid #090a08;
+  border-radius: 3px 3px 1px 1px;
+  color: #292a26;
+  background: #aaa89f;
+  box-shadow: 0 4px 0 #444540, 0 6px 4px rgba(0,0,0,.4), inset 0 1px #dedbd3;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease;
+}
+
+.transport-control:hover:not(:disabled) {
+  background: #bdbbb1;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 0 #444540, 0 7px 5px rgba(0,0,0,.38), inset 0 1px #e8e5dc;
+}
+
+.transport-control:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #3c3d38, 0 2px 2px rgba(0,0,0,.42), inset 0 1px 3px rgba(0,0,0,.25);
+}
+
+.transport-control__icon {
+  display: grid;
+  width: 25px;
+  height: 19px;
+  place-items: center;
+}
+
+.transport-control__icon svg {
+  width: 24px;
+  height: 18px;
+  overflow: visible;
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+
+.transport-control__icon .transport-control__seek-icon {
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+
+.transport-control__legend {
+  position: absolute;
+  right: 0;
+  bottom: 3px;
+  left: 0;
+  font-size: 5px;
+  font-weight: 700;
+  letter-spacing: .16em;
 }
 
 .transport-button {
   position: relative;
   z-index: 2;
   display: grid;
-  width: 76px;
+  width: 70px;
   height: 51px;
-  margin: 7px auto 0;
+  flex: 0 0 70px;
+  margin: 0;
   padding: 0;
   border: 1px solid #090a08;
   border-radius: 3px 3px 1px 1px;
@@ -825,6 +905,86 @@ a:focus-visible {
   background-size: 10px 6px;
   font-size: 11px;
   cursor: pointer;
+}
+
+@media (max-width: 380px) {
+  .transport-deck {
+    width: min(94vw, 304px);
+  }
+
+  .transport-controls {
+    gap: 5px;
+  }
+
+  .transport-control {
+    width: 48px;
+    flex-basis: 48px;
+  }
+
+  .transport-button {
+    width: 62px;
+    flex-basis: 62px;
+  }
+}
+
+@keyframes transport-lamp-blink {
+  0%, 54% {
+    background: #e55e38;
+    box-shadow: 0 0 8px rgba(229,94,56,.9);
+  }
+
+  55%, 100% {
+    background: #4a2017;
+    box-shadow: inset 0 0 3px #0c0705;
+  }
+}
+
+@keyframes transport-meter-blink {
+  0%, 54% { background: #c75534; }
+  55%, 100% { background: #321a14; }
+}
+
+.play-pause-icon {
+  position: relative;
+  display: block;
+  width: 21px;
+  height: 20px;
+}
+
+.play-pause-icon i {
+  position: absolute;
+  top: 1px;
+  display: block;
+  width: 17px;
+  height: 18px;
+  background: currentColor;
+  transition: width .2s ease, transform .2s ease, opacity .16s ease, clip-path .2s ease;
+}
+
+.play-pause-icon i:first-child {
+  left: 2px;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+.play-pause-icon i:last-child {
+  right: 2px;
+  width: 5px;
+  opacity: 0;
+  transform: translateX(-5px);
+}
+
+.play-pause-icon.is-paused i {
+  width: 5px;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.play-pause-icon.is-paused i:first-child {
+  transform: translateX(2px);
+}
+
+.play-pause-icon.is-paused i:last-child {
+  opacity: 1;
+  transform: translateX(-2px);
 }
 
 .tape-option select:focus-visible {
