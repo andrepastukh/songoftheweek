@@ -84,7 +84,7 @@ export function App() {
 
       <footer className="app-footer">
         <span>Made with ❤ for the music</span>
-        <span>V 1.2.0</span>
+        <span>V 1.2.1</span>
       </footer>
     </main>
   );

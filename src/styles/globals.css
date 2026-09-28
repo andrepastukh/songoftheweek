@@ -1271,7 +1271,9 @@ a:focus-visible {
   }
 
   .tape-stage {
-    width: min(100%, 730px);
+    /* Wide but shallow screens (for example a 14\" MacBook) still need the
+       height constraint; otherwise the tape overflows its grid row upwards. */
+    width: min(100%, 730px, max(320px, calc(139.9145dvh - 461.718px)));
   }
 }
 
