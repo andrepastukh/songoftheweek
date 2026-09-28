@@ -15,6 +15,11 @@ export const BACKGROUND_OPTIONS = [
   { id: "orange-2", label: "Orange 2", color: "#b86441", src: "/assets/tape/background_color/background_color_orange2.png" },
 ] as const;
 
+export const TAPE_SHELL_OPTIONS = [
+  { id: "standard", label: "Standard" },
+  { id: "white", label: "Weiß" },
+] as const;
+
 export const DESIGN_OPTIONS = [
   { id: "none", label: "Kein Design", src: null },
   { id: "lines", label: "Linien", src: "/assets/tape/design/LinienDesign.png" },
@@ -66,17 +71,23 @@ export const PAGE_BACKGROUND_OPTIONS = [
 ] as const;
 
 export type BackgroundId = (typeof BACKGROUND_OPTIONS)[number]["id"];
+export type TapeShellId = (typeof TAPE_SHELL_OPTIONS)[number]["id"];
 export type DesignId = (typeof DESIGN_OPTIONS)[number]["id"];
 export type TextColorId = (typeof TEXT_COLOR_OPTIONS)[number]["id"];
 export type PageBackgroundId = (typeof PAGE_BACKGROUND_OPTIONS)[number]["id"];
 
 export const DEFAULT_BACKGROUND_ID: BackgroundId = "white";
+export const DEFAULT_TAPE_SHELL_ID: TapeShellId = "standard";
 export const DEFAULT_DESIGN_ID: DesignId = "lines-3";
 export const DEFAULT_TEXT_COLOR_ID: TextColorId = "black";
 export const DEFAULT_PAGE_BACKGROUND_ID: PageBackgroundId = "paper";
 
 export function isBackgroundId(value: unknown): value is BackgroundId {
   return BACKGROUND_OPTIONS.some((option) => option.id === value);
+}
+
+export function isTapeShellId(value: unknown): value is TapeShellId {
+  return TAPE_SHELL_OPTIONS.some((option) => option.id === value);
 }
 
 export function isDesignId(value: unknown): value is DesignId {

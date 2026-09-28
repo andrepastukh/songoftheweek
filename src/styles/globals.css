@@ -376,6 +376,10 @@ a:focus-visible {
   z-index: 0;
 }
 
+.tape-shadow--soft {
+  opacity: .55;
+}
+
 .tape-reel {
   z-index: 1;
   animation: tape-reel-spin linear infinite;

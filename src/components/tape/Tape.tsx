@@ -8,6 +8,7 @@ const asset = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//
 export function Tape() {
   const isPlaying = useSpotifyStore((state) => state.isPlaying || state.isStarting || state.isPreviewPlaying);
   const message = useTapeStore((state) => state.message).trim();
+  const tapeShellId = useTapeStore((state) => state.tapeShellId);
   const backgroundId = useTapeStore((state) => state.backgroundId);
   const backgroundColor = useTapeStore((state) => state.backgroundColor);
   const designId = useTapeStore((state) => state.designId);
@@ -34,7 +35,7 @@ export function Tape() {
     >
       <div className="tape-composition">
         <img
-          className="tape-layer tape-shadow"
+          className={`tape-layer tape-shadow ${tapeShellId === "white" ? "tape-shadow--soft" : ""}`}
           src={asset("/assets/tape/tape-shadow.webp")}
           alt=""
           draggable={false}
@@ -53,7 +54,7 @@ export function Tape() {
         />
         <img
           className="tape-layer tape-shell"
-          src={asset("/assets/tape/tape-shell.webp")}
+          src={asset(tapeShellId === "white" ? "/assets/tape/tape-shell-white.png" : "/assets/tape/tape-shell.webp")}
           alt=""
           draggable={false}
         />

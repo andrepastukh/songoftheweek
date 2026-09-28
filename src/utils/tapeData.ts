@@ -1,5 +1,5 @@
 import type { TapeDesign } from "../types";
-import { DEFAULT_PAGE_BACKGROUND_ID, isBackgroundId, isDesignId, isPageBackgroundId, isTextColorId } from "../tapeOptions";
+import { DEFAULT_PAGE_BACKGROUND_ID, DEFAULT_TAPE_SHELL_ID, isBackgroundId, isDesignId, isPageBackgroundId, isTapeShellId, isTextColorId } from "../tapeOptions";
 import { isSpotifyTrackId, parseSpotifyTrackId } from "./spotifyUrl";
 
 export function isRecord(value: unknown): value is Record<string, unknown> {
@@ -14,6 +14,7 @@ export function parseTapeDesign(value: unknown): TapeDesign {
   if (!isRecord(value) || typeof value.spotifyTrackId !== "string" ||
     !isSpotifyTrackId(value.spotifyTrackId) || typeof value.message !== "string" ||
     value.message.length > 180 || !isBackgroundId(value.backgroundId) ||
+    (value.tapeShellId !== undefined && !isTapeShellId(value.tapeShellId)) ||
     (value.backgroundColor !== undefined && value.backgroundColor !== null && !isBackgroundColor(value.backgroundColor)) ||
     !isDesignId(value.designId) || !isTextColorId(value.textColorId) ||
     (value.pageBackgroundId !== undefined && !isPageBackgroundId(value.pageBackgroundId))) {
@@ -21,6 +22,7 @@ export function parseTapeDesign(value: unknown): TapeDesign {
   }
   return {
     spotifyTrackId: value.spotifyTrackId, message: value.message,
+    tapeShellId: isTapeShellId(value.tapeShellId) ? value.tapeShellId : DEFAULT_TAPE_SHELL_ID,
     backgroundId: value.backgroundId,
     backgroundColor: isBackgroundColor(value.backgroundColor) ? value.backgroundColor.toLowerCase() : null,
     designId: value.designId, textColorId: value.textColorId,

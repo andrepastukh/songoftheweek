@@ -4,10 +4,12 @@ import {
   BACKGROUND_OPTIONS,
   DESIGN_OPTIONS,
   PAGE_BACKGROUND_OPTIONS,
+  TAPE_SHELL_OPTIONS,
   TEXT_COLOR_OPTIONS,
   type BackgroundId,
   type DesignId,
   type PageBackgroundId,
+  type TapeShellId,
   type TextColorId,
 } from "../../tapeOptions";
 import { ShareButton } from "./ShareButton";
@@ -15,6 +17,7 @@ import { SpotifyInput } from "./SpotifyInput";
 
 export function TapeEditor() {
   const message = useTapeStore((state) => state.message);
+  const tapeShellId = useTapeStore((state) => state.tapeShellId);
   const backgroundId = useTapeStore((state) => state.backgroundId);
   const backgroundColor = useTapeStore((state) => state.backgroundColor);
   const designId = useTapeStore((state) => state.designId);
@@ -22,6 +25,7 @@ export function TapeEditor() {
   const pageBackgroundId = useTapeStore((state) => state.pageBackgroundId);
   const sharedMode = useTapeStore((state) => state.sharedMode);
   const setMessage = useTapeStore((state) => state.setMessage);
+  const setTapeShellId = useTapeStore((state) => state.setTapeShellId);
   const setBackgroundId = useTapeStore((state) => state.setBackgroundId);
   const setBackgroundColor = useTapeStore((state) => state.setBackgroundColor);
   const setDesignId = useTapeStore((state) => state.setDesignId);
@@ -54,6 +58,15 @@ export function TapeEditor() {
       <div className="editor-section">
         <label>Artwork</label>
         <div className="tape-option-list">
+          <label className="tape-option">
+            <span>Kassette</span>
+            <select value={tapeShellId} onChange={(event) => setTapeShellId(event.target.value as TapeShellId)}>
+              {TAPE_SHELL_OPTIONS.map((option) => (
+                <option key={option.id} value={option.id}>{option.label}</option>
+              ))}
+            </select>
+          </label>
+
           <label className="tape-option">
             <span>Hintergrund</span>
             <select value={backgroundId} onChange={(event) => setBackgroundId(event.target.value as BackgroundId)}>

@@ -28,7 +28,7 @@ Auf Wunsch bleibt die komplette Kassette im Link:
 https://NAME.github.io/songoftheweek/#/t/<snapshot>
 ```
 
-Gespeichert werden Formatversion, Spotify-Track-ID, Nachricht, die stabilen IDs für Kassettenfarbe, Design, Textfarbe und Seitenfarbe sowie optional eine frei gewählte Kassettenfarbe als Hex-Wert. Das kompakte JSON-Array wird UTF-8-/Base64URL-kodiert. Es enthält keine Tokens, Bilddateien, Metadaten oder UI-Objekte. Die Nachricht bleibt einschließlich Zeilenumbrüchen und Leerzeichen erhalten; die bestehende Kassettenanzeige trimmt weiterhin äußere Leerzeichen.
+Gespeichert werden Formatversion, Spotify-Track-ID, Nachricht, die stabilen IDs für Gehäuse, Kassettenfarbe, Design, Textfarbe und Seitenfarbe sowie optional eine frei gewählte Kassettenfarbe als Hex-Wert. Das kompakte JSON-Array wird UTF-8-/Base64URL-kodiert. Es enthält keine Tokens, Bilddateien, Metadaten oder UI-Objekte. Die Nachricht bleibt einschließlich Zeilenumbrüchen und Leerzeichen erhalten; die bestehende Kassettenanzeige trimmt weiterhin äußere Leerzeichen.
 
 Der Link funktioniert auf anderen Geräten ohne localStorage, solange die App mit kompatiblem Decoder und ihren Artwork-Dateien erreichbar bleibt. Er enthält den gesamten Snapshot: spätere Änderungen im Editor verändern einen bereits verschickten Link nicht. „Neuen Share-Link erstellen“ erzeugt den neuen Stand. Identische Inhalte erzeugen denselben Link. Bisherige `#/tape/<state>`-Links bleiben lesbar.
 
