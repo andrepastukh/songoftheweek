@@ -5,14 +5,16 @@ import {
   DEFAULT_PAGE_BACKGROUND_COLOR,
   DEFAULT_TAPE_SHELL_ID,
   DEFAULT_TEXT_COLOR_ID,
+  DEFAULT_TEXT_FONT_ID,
   type BackgroundId,
   type DesignId,
   type TapeShellId,
   type TextColorId,
+  type TextFontId,
 } from "../tapeOptions";
 import type { TapeDesign } from "../types";
 import { hydrateTape, isBackgroundColor, isRecord } from "../utils/tapeData";
-import { isBackgroundId, isDesignId, isPageBackgroundId, isTapeShellId, isTextColorId, PAGE_BACKGROUND_OPTIONS } from "../tapeOptions";
+import { isBackgroundId, isDesignId, isPageBackgroundId, isTapeShellId, isTextColorId, isTextFontId, PAGE_BACKGROUND_OPTIONS } from "../tapeOptions";
 
 type TapeState = {
   spotifyUrl: string;
@@ -22,6 +24,7 @@ type TapeState = {
   backgroundColor: string | null;
   designId: DesignId;
   textColorId: TextColorId;
+  textFontId: TextFontId;
   pageBackgroundColor: string;
   editorOpen: boolean;
   sharedMode: boolean;
@@ -32,6 +35,7 @@ type TapeState = {
   setBackgroundColor: (value: string) => void;
   setDesignId: (value: DesignId) => void;
   setTextColorId: (value: TextColorId) => void;
+  setTextFontId: (value: TextFontId) => void;
   setPageBackgroundColor: (value: string) => void;
   setEditorOpen: (value: boolean) => void;
   hydrateSharedTape: (tape: TapeDesign) => void;
@@ -46,6 +50,7 @@ export const useTapeStore = create<TapeState>((set) => ({
   backgroundColor: null,
   designId: DEFAULT_DESIGN_ID,
   textColorId: DEFAULT_TEXT_COLOR_ID,
+  textFontId: DEFAULT_TEXT_FONT_ID,
   pageBackgroundColor: DEFAULT_PAGE_BACKGROUND_COLOR,
   editorOpen: true,
   sharedMode: false,
@@ -58,6 +63,7 @@ export const useTapeStore = create<TapeState>((set) => ({
   },
   setDesignId: (designId) => set({ designId }),
   setTextColorId: (textColorId) => set({ textColorId }),
+  setTextFontId: (textFontId) => set({ textFontId }),
   setPageBackgroundColor: (pageBackgroundColor) => {
     if (isBackgroundColor(pageBackgroundColor)) set({ pageBackgroundColor: pageBackgroundColor.toLowerCase() });
   },
@@ -69,6 +75,7 @@ export const useTapeStore = create<TapeState>((set) => ({
       (draft.tapeShellId !== undefined && !isTapeShellId(draft.tapeShellId)) ||
       (draft.backgroundColor !== undefined && draft.backgroundColor !== null && !isBackgroundColor(draft.backgroundColor)) ||
       !isDesignId(draft.designId) || !isTextColorId(draft.textColorId) ||
+      (draft.textFontId !== undefined && !isTextFontId(draft.textFontId)) ||
       (draft.pageBackgroundColor !== undefined && !isBackgroundColor(draft.pageBackgroundColor)) ||
       (draft.pageBackgroundColor === undefined && draft.pageBackgroundId !== undefined && !isPageBackgroundId(draft.pageBackgroundId)) ||
       typeof draft.editorOpen !== "boolean" || typeof draft.sharedMode !== "boolean") return;
@@ -77,6 +84,7 @@ export const useTapeStore = create<TapeState>((set) => ({
       backgroundId: draft.backgroundId,
       backgroundColor: isBackgroundColor(draft.backgroundColor) ? draft.backgroundColor.toLowerCase() : null,
       designId: draft.designId, textColorId: draft.textColorId,
+      textFontId: isTextFontId(draft.textFontId) ? draft.textFontId : DEFAULT_TEXT_FONT_ID,
       pageBackgroundColor: isBackgroundColor(draft.pageBackgroundColor)
         ? draft.pageBackgroundColor.toLowerCase()
         : PAGE_BACKGROUND_OPTIONS.find((option) => option.id === draft.pageBackgroundId)?.color ?? DEFAULT_PAGE_BACKGROUND_COLOR,

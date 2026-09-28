@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import { useTapeStore } from "../../state/tapeStore";
 import { useSpotifyStore } from "../../state/spotifyStore";
-import { BACKGROUND_OPTIONS, DESIGN_OPTIONS, TEXT_COLOR_OPTIONS } from "../../tapeOptions";
+import { BACKGROUND_OPTIONS, DESIGN_OPTIONS, TEXT_COLOR_OPTIONS, TEXT_FONT_OPTIONS } from "../../tapeOptions";
 import { getTapeTextSize } from "../../utils/tapeText";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, "")}`;
@@ -14,11 +14,13 @@ export function Tape() {
   const backgroundColor = useTapeStore((state) => state.backgroundColor);
   const designId = useTapeStore((state) => state.designId);
   const textColorId = useTapeStore((state) => state.textColorId);
+  const textFontId = useTapeStore((state) => state.textFontId);
   const background = BACKGROUND_OPTIONS.find((option) => option.id === backgroundId) ?? BACKGROUND_OPTIONS[0];
   const design = DESIGN_OPTIONS.find((option) => option.id === designId) ?? DESIGN_OPTIONS[0];
   const textColor = TEXT_COLOR_OPTIONS.find((option) => option.id === textColorId) ?? TEXT_COLOR_OPTIONS[0];
+  const textFont = TEXT_FONT_OPTIONS.find((option) => option.id === textFontId) ?? TEXT_FONT_OPTIONS[0];
   const whiteBackground = BACKGROUND_OPTIONS.find((option) => option.id === "white") ?? BACKGROUND_OPTIONS[0];
-  const textSize = getTapeTextSize(message);
+  const textSize = getTapeTextSize(message, textFont.sizeScale);
 
   return (
     <figure
@@ -84,6 +86,8 @@ export function Tape() {
             style={{
               "--tape-text-size": textSize,
               "--tape-text-color": textColorId === "white" ? "#f7f4ea" : "#292927",
+              "--tape-text-family": textFont.family,
+              "--tape-text-weight": textFont.weight,
             } as CSSProperties}
           >
             {message}

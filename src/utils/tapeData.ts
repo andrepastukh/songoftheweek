@@ -1,5 +1,5 @@
 import type { TapeDesign } from "../types";
-import { DEFAULT_PAGE_BACKGROUND_COLOR, DEFAULT_TAPE_SHELL_ID, isBackgroundId, isDesignId, isPageBackgroundId, isTapeShellId, isTextColorId, PAGE_BACKGROUND_OPTIONS } from "../tapeOptions";
+import { DEFAULT_PAGE_BACKGROUND_COLOR, DEFAULT_TAPE_SHELL_ID, DEFAULT_TEXT_FONT_ID, isBackgroundId, isDesignId, isPageBackgroundId, isTapeShellId, isTextColorId, isTextFontId, PAGE_BACKGROUND_OPTIONS } from "../tapeOptions";
 import { isSpotifyTrackId, parseSpotifyTrackId } from "./spotifyUrl";
 
 export function isRecord(value: unknown): value is Record<string, unknown> {
@@ -17,6 +17,7 @@ export function parseTapeDesign(value: unknown): TapeDesign {
     (value.tapeShellId !== undefined && !isTapeShellId(value.tapeShellId)) ||
     (value.backgroundColor !== undefined && value.backgroundColor !== null && !isBackgroundColor(value.backgroundColor)) ||
     !isDesignId(value.designId) || !isTextColorId(value.textColorId) ||
+    (value.textFontId !== undefined && !isTextFontId(value.textFontId)) ||
     (value.pageBackgroundColor !== undefined && !isBackgroundColor(value.pageBackgroundColor)) ||
     (value.pageBackgroundColor === undefined && value.pageBackgroundId !== undefined && !isPageBackgroundId(value.pageBackgroundId))) {
     throw new Error("Bitte Song, Nachricht und Kassettendesign überprüfen.");
@@ -27,6 +28,7 @@ export function parseTapeDesign(value: unknown): TapeDesign {
     backgroundId: value.backgroundId,
     backgroundColor: isBackgroundColor(value.backgroundColor) ? value.backgroundColor.toLowerCase() : null,
     designId: value.designId, textColorId: value.textColorId,
+    textFontId: isTextFontId(value.textFontId) ? value.textFontId : DEFAULT_TEXT_FONT_ID,
     pageBackgroundColor: isBackgroundColor(value.pageBackgroundColor)
       ? value.pageBackgroundColor.toLowerCase()
       : PAGE_BACKGROUND_OPTIONS.find((option) => option.id === value.pageBackgroundId)?.color ?? DEFAULT_PAGE_BACKGROUND_COLOR,

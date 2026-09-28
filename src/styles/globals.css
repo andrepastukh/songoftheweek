@@ -1,5 +1,4 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Qwigley:wght@400;500;600&display=swap');
 @import url("https://fonts.googleapis.com/css2?family=Plaster&display=swap");
 :root {
   font-family: "DM Sans", Arial, sans-serif;
@@ -45,7 +44,7 @@
 .track-info__demo-cover { display: grid; width: 48px; height: 48px; flex: 0 0 48px; place-items: center; border: 1px solid rgba(31,32,28,.24); color: #e9e4d8 !important; background: #292b27; font-family: "Plaster", sans-serif; font-size: 23px; }
 .transport-button:disabled, .transport-control:disabled, .text-button:disabled { opacity: .38; cursor: default; }
 .editor-panel {
-  max-height: calc(100dvh - 145px);
+  max-height: calc(100dvh - 40px);
   overflow-y: auto;
   scrollbar-color: color-mix(in srgb, var(--ink) 38%, transparent) transparent;
   scrollbar-width: thin;
@@ -454,6 +453,8 @@ a:focus-visible {
 
 .tape-user-text {
   --tape-text-color: #292927;
+  --tape-text-family: "Qwigley", cursive;
+  --tape-text-weight: 500;
 
   position: absolute;
   z-index: 2;
@@ -469,11 +470,11 @@ a:focus-visible {
   overflow: hidden;
 
   color: var(--tape-text-color);
-  font-family: "Qwigley", cursive;
+  font-family: var(--tape-text-family);
 
   font-size: var(--tape-text-size);
 
-  font-weight: 500;
+  font-weight: var(--tape-text-weight);
   line-height: 1.05;
   letter-spacing: 0.01em;
   text-align: center;
@@ -778,7 +779,7 @@ a:focus-visible {
   position: relative;
   z-index: 15;
   width: 100%;
-  padding: 30px 30px 28px;
+  padding: 24px 30px 22px;
   border: 1px solid var(--line);
   border-radius: 10px;
   color: var(--ink);
@@ -791,7 +792,7 @@ a:focus-visible {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 29px;
+  margin-bottom: 20px;
 }
 
 .eyebrow {
@@ -898,6 +899,22 @@ a:focus-visible {
 .tape-option-list {
   display: grid;
   gap: 9px;
+}
+
+@media (min-width: 801px) {
+  .tape-option-list--compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tape-option-list--compact .tape-option {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    gap: 5px;
+  }
+
+  .tape-option-list--compact .tape-option--wide {
+    grid-column: 1 / -1;
+  }
 }
 
 .tape-option {
@@ -1017,6 +1034,19 @@ a:focus-visible {
   background: #fff;
 }
 
+.tape-inline-selects {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 6px;
+}
+
+.tape-inline-selects select {
+  min-width: 0;
+  padding-right: 28px;
+  background-position: right 10px center;
+}
+
 .tape-color-control {
   display: flex;
   min-height: 34px;
@@ -1100,8 +1130,8 @@ a:focus-visible {
 
 .text-input-wrap--area {
   align-items: flex-start;
-  min-height: 86px;
-  padding: 11px 12px 24px;
+  min-height: 72px;
+  padding: 8px 12px 18px;
   border: 1px solid var(--line);
   border-radius: 7px;
   background: var(--control-background);
@@ -1115,7 +1145,8 @@ a:focus-visible {
 }
 
 .text-input-wrap textarea {
-  min-height: 65px;
+  height: 45px;
+  min-height: 45px;
   padding: 0 34px 0 0;
   line-height: 1.5;
   resize: none;
@@ -1133,7 +1164,7 @@ a:focus-visible {
 .share-button {
   display: flex;
   width: 100%;
-  min-height: 48px;
+  min-height: 44px;
   align-items: center;
   justify-content: space-between;
   padding: 0 17px;

@@ -5,10 +5,12 @@ import {
   DESIGN_OPTIONS,
   TAPE_SHELL_OPTIONS,
   TEXT_COLOR_OPTIONS,
+  TEXT_FONT_OPTIONS,
   type BackgroundId,
   type DesignId,
   type TapeShellId,
   type TextColorId,
+  type TextFontId,
 } from "../../tapeOptions";
 import { ShareButton } from "./ShareButton";
 import { SpotifyInput } from "./SpotifyInput";
@@ -20,6 +22,7 @@ export function TapeEditor() {
   const backgroundColor = useTapeStore((state) => state.backgroundColor);
   const designId = useTapeStore((state) => state.designId);
   const textColorId = useTapeStore((state) => state.textColorId);
+  const textFontId = useTapeStore((state) => state.textFontId);
   const pageBackgroundColor = useTapeStore((state) => state.pageBackgroundColor);
   const sharedMode = useTapeStore((state) => state.sharedMode);
   const setMessage = useTapeStore((state) => state.setMessage);
@@ -28,6 +31,7 @@ export function TapeEditor() {
   const setBackgroundColor = useTapeStore((state) => state.setBackgroundColor);
   const setDesignId = useTapeStore((state) => state.setDesignId);
   const setTextColorId = useTapeStore((state) => state.setTextColorId);
+  const setTextFontId = useTapeStore((state) => state.setTextFontId);
   const setPageBackgroundColor = useTapeStore((state) => state.setPageBackgroundColor);
   const setEditorOpen = useTapeStore((state) => state.setEditorOpen);
   const selectedBackground = BACKGROUND_OPTIONS.find((option) => option.id === backgroundId) ?? BACKGROUND_OPTIONS[0];
@@ -55,7 +59,7 @@ export function TapeEditor() {
 
       <div className="editor-section">
         <label>Artwork</label>
-        <div className="tape-option-list">
+        <div className="tape-option-list tape-option-list--compact">
           <label className="tape-option">
             <span>Kassette</span>
             <select value={tapeShellId} onChange={(event) => setTapeShellId(event.target.value as TapeShellId)}>
@@ -96,14 +100,29 @@ export function TapeEditor() {
             </select>
           </label>
 
-          <label className="tape-option">
-            <span>Textfarbe</span>
-            <select value={textColorId} onChange={(event) => setTextColorId(event.target.value as TextColorId)}>
-              {TEXT_COLOR_OPTIONS.map((option) => (
-                <option key={option.id} value={option.id}>{option.label}</option>
-              ))}
-            </select>
-          </label>
+          <div className="tape-option tape-option--wide">
+            <span>Schrift / Farbe</span>
+            <span className="tape-inline-selects">
+              <select
+                value={textFontId}
+                onChange={(event) => setTextFontId(event.target.value as TextFontId)}
+                aria-label="Schriftart"
+              >
+                {TEXT_FONT_OPTIONS.map((option) => (
+                  <option key={option.id} value={option.id}>{option.label}</option>
+                ))}
+              </select>
+              <select
+                value={textColorId}
+                onChange={(event) => setTextColorId(event.target.value as TextColorId)}
+                aria-label="Textfarbe"
+              >
+                {TEXT_COLOR_OPTIONS.map((option) => (
+                  <option key={option.id} value={option.id}>{option.label}</option>
+                ))}
+              </select>
+            </span>
+          </div>
 
           <label className="tape-option tape-color-option is-active">
             <span>Seitenfarbe</span>
@@ -123,7 +142,7 @@ export function TapeEditor() {
       <div className="editor-section">
         <label htmlFor="message">Tape text</label>
         <div className="text-input-wrap text-input-wrap--area">
-          <textarea id="message" value={message} maxLength={180} onChange={(event) => setMessage(event.target.value)} placeholder="Text auf der Kassette …" rows={4} />
+          <textarea id="message" value={message} maxLength={180} onChange={(event) => setMessage(event.target.value)} placeholder="Text auf der Kassette …" rows={3} />
           <span>{message.length}/180</span>
         </div>
       </div>

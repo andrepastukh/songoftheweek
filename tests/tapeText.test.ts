@@ -14,4 +14,9 @@ describe("tape text sizing", () => {
     expect(getTapeTextSize("Eine\nNachricht\nmit\nZeilen")).toBe("3.11cqw");
     expect(getTapeTextSize(`${"x\n".repeat(89)}xx`)).toBe("1.65cqw");
   });
+
+  it("scales wider font families without changing the length curve", () => {
+    expect(getTapeTextSize("x".repeat(24), .7)).toBe("3.04cqw");
+    expect(getTapeTextSize("x".repeat(180), .65)).toBe("1.10cqw");
+  });
 });

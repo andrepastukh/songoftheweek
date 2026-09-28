@@ -51,6 +51,17 @@ export const TEXT_COLOR_OPTIONS = [
   },
 ] as const;
 
+export const TEXT_FONT_OPTIONS = [
+  { id: "handwriting", label: "Qwigley", family: '"Qwigley", cursive', weight: 500, sizeScale: 1 },
+  { id: "caveat", label: "Caveat", family: '"Caveat", cursive', weight: 500, sizeScale: .78 },
+  { id: "dancing-script", label: "Dancing Script", family: '"Dancing Script", cursive', weight: 500, sizeScale: .72 },
+  { id: "sacramento", label: "Sacramento", family: '"Sacramento", cursive', weight: 400, sizeScale: .88 },
+  { id: "patrick-hand", label: "Patrick Hand", family: '"Patrick Hand", cursive', weight: 400, sizeScale: .72 },
+  { id: "classic", label: "Klassisch", family: 'Georgia, "Times New Roman", serif', weight: 400, sizeScale: .75 },
+  { id: "modern", label: "Modern", family: '"DM Sans", Arial, sans-serif', weight: 500, sizeScale: .7 },
+  { id: "typewriter", label: "Schreibmaschine", family: '"Courier New", monospace', weight: 400, sizeScale: .65 },
+] as const;
+
 export const PAGE_BACKGROUND_OPTIONS = [
   {
     id: "paper", label: "Papier", color: "#ece7dc", halftone: "#3e4038",
@@ -74,12 +85,14 @@ export type BackgroundId = (typeof BACKGROUND_OPTIONS)[number]["id"];
 export type TapeShellId = (typeof TAPE_SHELL_OPTIONS)[number]["id"];
 export type DesignId = (typeof DESIGN_OPTIONS)[number]["id"];
 export type TextColorId = (typeof TEXT_COLOR_OPTIONS)[number]["id"];
+export type TextFontId = (typeof TEXT_FONT_OPTIONS)[number]["id"];
 export type PageBackgroundId = (typeof PAGE_BACKGROUND_OPTIONS)[number]["id"];
 
 export const DEFAULT_BACKGROUND_ID: BackgroundId = "white";
 export const DEFAULT_TAPE_SHELL_ID: TapeShellId = "standard";
 export const DEFAULT_DESIGN_ID: DesignId = "lines-3";
 export const DEFAULT_TEXT_COLOR_ID: TextColorId = "black";
+export const DEFAULT_TEXT_FONT_ID: TextFontId = "handwriting";
 export const DEFAULT_PAGE_BACKGROUND_ID: PageBackgroundId = "paper";
 export const DEFAULT_PAGE_BACKGROUND_COLOR = PAGE_BACKGROUND_OPTIONS.find(
   (option) => option.id === DEFAULT_PAGE_BACKGROUND_ID,
@@ -99,6 +112,10 @@ export function isDesignId(value: unknown): value is DesignId {
 
 export function isTextColorId(value: unknown): value is TextColorId {
   return TEXT_COLOR_OPTIONS.some((option) => option.id === value);
+}
+
+export function isTextFontId(value: unknown): value is TextFontId {
+  return TEXT_FONT_OPTIONS.some((option) => option.id === value);
 }
 
 export function isPageBackgroundId(value: unknown): value is PageBackgroundId {

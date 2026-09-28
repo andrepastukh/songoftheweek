@@ -1,10 +1,10 @@
 import type { SharedTape, TapeDesign } from "../types";
-import { DEFAULT_BACKGROUND_ID, DEFAULT_DESIGN_ID, DEFAULT_PAGE_BACKGROUND_ID, DEFAULT_TAPE_SHELL_ID, DEFAULT_TEXT_COLOR_ID } from "../tapeOptions";
+import { DEFAULT_BACKGROUND_ID, DEFAULT_DESIGN_ID, DEFAULT_PAGE_BACKGROUND_ID, DEFAULT_TAPE_SHELL_ID, DEFAULT_TEXT_COLOR_ID, DEFAULT_TEXT_FONT_ID } from "../tapeOptions";
 import { isRecord, parseTapeDesign } from "./tapeData";
 
 export function encodeTape(input: TapeDesign): string {
   const tape = parseTapeDesign(input);
-  const compact = [5, tape.spotifyTrackId, tape.message, tape.backgroundId, tape.designId, tape.textColorId, tape.pageBackgroundColor, tape.backgroundColor, tape.tapeShellId];
+  const compact = [6, tape.spotifyTrackId, tape.message, tape.backgroundId, tape.designId, tape.textColorId, tape.pageBackgroundColor, tape.backgroundColor, tape.tapeShellId, tape.textFontId];
   const bytes = new TextEncoder().encode(JSON.stringify(compact));
   return btoa(String.fromCharCode(...bytes)).replaceAll("+", "-").replaceAll("/", "_").replaceAll("=", "");
 }
@@ -20,41 +20,48 @@ export function decodeTape(value: string): SharedTape | null {
         return { ...parseTapeDesign({
           spotifyTrackId: parsed[1], message: parsed[2], backgroundId: parsed[3], designId: parsed[4], textColorId: parsed[5],
           pageBackgroundId: DEFAULT_PAGE_BACKGROUND_ID,
-        }), schemaVersion: 5 };
+        }), schemaVersion: 6 };
       }
       if (parsed[0] === 2 && parsed.length === 7) {
         return { ...parseTapeDesign({
           spotifyTrackId: parsed[1], message: parsed[2], backgroundId: parsed[3], designId: parsed[4], textColorId: parsed[5],
           pageBackgroundId: parsed[6],
-        }), schemaVersion: 5 };
+        }), schemaVersion: 6 };
       }
       if (parsed[0] === 3 && parsed.length === 8) {
         return { ...parseTapeDesign({
           spotifyTrackId: parsed[1], message: parsed[2], backgroundId: parsed[3], designId: parsed[4], textColorId: parsed[5],
           pageBackgroundId: parsed[6], backgroundColor: parsed[7], tapeShellId: DEFAULT_TAPE_SHELL_ID,
-        }), schemaVersion: 5 };
+        }), schemaVersion: 6 };
       }
       if (parsed[0] === 4 && parsed.length === 9) {
         return { ...parseTapeDesign({
           spotifyTrackId: parsed[1], message: parsed[2], backgroundId: parsed[3], designId: parsed[4], textColorId: parsed[5],
           pageBackgroundId: parsed[6], backgroundColor: parsed[7], tapeShellId: parsed[8],
-        }), schemaVersion: 5 };
+        }), schemaVersion: 6 };
       }
-      if (parsed[0] !== 5 || parsed.length !== 9) return null;
+      if (parsed[0] === 5 && parsed.length === 9) {
+        return { ...parseTapeDesign({
+          spotifyTrackId: parsed[1], message: parsed[2], backgroundId: parsed[3], designId: parsed[4], textColorId: parsed[5],
+          pageBackgroundColor: parsed[6], backgroundColor: parsed[7], tapeShellId: parsed[8], textFontId: DEFAULT_TEXT_FONT_ID,
+        }), schemaVersion: 6 };
+      }
+      if (parsed[0] !== 6 || parsed.length !== 10) return null;
       return { ...parseTapeDesign({
         spotifyTrackId: parsed[1], message: parsed[2], backgroundId: parsed[3], designId: parsed[4], textColorId: parsed[5],
-        pageBackgroundColor: parsed[6], backgroundColor: parsed[7], tapeShellId: parsed[8],
-      }), schemaVersion: 5 };
+        pageBackgroundColor: parsed[6], backgroundColor: parsed[7], tapeShellId: parsed[8], textFontId: parsed[9],
+      }), schemaVersion: 6 };
     }
     // Legacy links used an unversioned object; early ones omitted artwork IDs.
-    if (!isRecord(parsed) || (parsed.schemaVersion !== undefined && parsed.schemaVersion !== 1 && parsed.schemaVersion !== 2 && parsed.schemaVersion !== 3 && parsed.schemaVersion !== 4 && parsed.schemaVersion !== 5)) return null;
+    if (!isRecord(parsed) || (parsed.schemaVersion !== undefined && parsed.schemaVersion !== 1 && parsed.schemaVersion !== 2 && parsed.schemaVersion !== 3 && parsed.schemaVersion !== 4 && parsed.schemaVersion !== 5 && parsed.schemaVersion !== 6)) return null;
     return { ...parseTapeDesign({
       ...parsed, backgroundId: parsed.backgroundId ?? DEFAULT_BACKGROUND_ID,
       designId: parsed.designId ?? DEFAULT_DESIGN_ID, textColorId: parsed.textColorId ?? DEFAULT_TEXT_COLOR_ID,
       pageBackgroundId: parsed.pageBackgroundId ?? DEFAULT_PAGE_BACKGROUND_ID,
       pageBackgroundColor: parsed.pageBackgroundColor,
       tapeShellId: parsed.tapeShellId ?? DEFAULT_TAPE_SHELL_ID,
-    }), schemaVersion: 5 };
+      textFontId: parsed.textFontId ?? DEFAULT_TEXT_FONT_ID,
+    }), schemaVersion: 6 };
   } catch { return null; }
 }
 
