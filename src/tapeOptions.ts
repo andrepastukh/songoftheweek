@@ -81,6 +81,9 @@ export const DEFAULT_TAPE_SHELL_ID: TapeShellId = "standard";
 export const DEFAULT_DESIGN_ID: DesignId = "lines-3";
 export const DEFAULT_TEXT_COLOR_ID: TextColorId = "black";
 export const DEFAULT_PAGE_BACKGROUND_ID: PageBackgroundId = "paper";
+export const DEFAULT_PAGE_BACKGROUND_COLOR = PAGE_BACKGROUND_OPTIONS.find(
+  (option) => option.id === DEFAULT_PAGE_BACKGROUND_ID,
+)?.color ?? "#ece7dc";
 
 export function isBackgroundId(value: unknown): value is BackgroundId {
   return BACKGROUND_OPTIONS.some((option) => option.id === value);

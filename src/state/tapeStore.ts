@@ -2,18 +2,17 @@ import { create } from "zustand";
 import {
   DEFAULT_BACKGROUND_ID,
   DEFAULT_DESIGN_ID,
-  DEFAULT_PAGE_BACKGROUND_ID,
+  DEFAULT_PAGE_BACKGROUND_COLOR,
   DEFAULT_TAPE_SHELL_ID,
   DEFAULT_TEXT_COLOR_ID,
   type BackgroundId,
   type DesignId,
-  type PageBackgroundId,
   type TapeShellId,
   type TextColorId,
 } from "../tapeOptions";
 import type { TapeDesign } from "../types";
 import { hydrateTape, isBackgroundColor, isRecord } from "../utils/tapeData";
-import { isBackgroundId, isDesignId, isPageBackgroundId, isTapeShellId, isTextColorId } from "../tapeOptions";
+import { isBackgroundId, isDesignId, isPageBackgroundId, isTapeShellId, isTextColorId, PAGE_BACKGROUND_OPTIONS } from "../tapeOptions";
 
 type TapeState = {
   spotifyUrl: string;
@@ -23,7 +22,7 @@ type TapeState = {
   backgroundColor: string | null;
   designId: DesignId;
   textColorId: TextColorId;
-  pageBackgroundId: PageBackgroundId;
+  pageBackgroundColor: string;
   editorOpen: boolean;
   sharedMode: boolean;
   setSpotifyUrl: (value: string) => void;
@@ -33,7 +32,7 @@ type TapeState = {
   setBackgroundColor: (value: string) => void;
   setDesignId: (value: DesignId) => void;
   setTextColorId: (value: TextColorId) => void;
-  setPageBackgroundId: (value: PageBackgroundId) => void;
+  setPageBackgroundColor: (value: string) => void;
   setEditorOpen: (value: boolean) => void;
   hydrateSharedTape: (tape: TapeDesign) => void;
   restoreDraft: (draft: unknown) => void;
@@ -47,7 +46,7 @@ export const useTapeStore = create<TapeState>((set) => ({
   backgroundColor: null,
   designId: DEFAULT_DESIGN_ID,
   textColorId: DEFAULT_TEXT_COLOR_ID,
-  pageBackgroundId: DEFAULT_PAGE_BACKGROUND_ID,
+  pageBackgroundColor: DEFAULT_PAGE_BACKGROUND_COLOR,
   editorOpen: true,
   sharedMode: false,
   setSpotifyUrl: (spotifyUrl) => set({ spotifyUrl: spotifyUrl.slice(0, 2048) }),
@@ -59,7 +58,9 @@ export const useTapeStore = create<TapeState>((set) => ({
   },
   setDesignId: (designId) => set({ designId }),
   setTextColorId: (textColorId) => set({ textColorId }),
-  setPageBackgroundId: (pageBackgroundId) => set({ pageBackgroundId }),
+  setPageBackgroundColor: (pageBackgroundColor) => {
+    if (isBackgroundColor(pageBackgroundColor)) set({ pageBackgroundColor: pageBackgroundColor.toLowerCase() });
+  },
   setEditorOpen: (editorOpen) => set({ editorOpen }),
   hydrateSharedTape: (tape) => set(hydrateTape(tape)),
   restoreDraft: (draft) => {
@@ -68,14 +69,17 @@ export const useTapeStore = create<TapeState>((set) => ({
       (draft.tapeShellId !== undefined && !isTapeShellId(draft.tapeShellId)) ||
       (draft.backgroundColor !== undefined && draft.backgroundColor !== null && !isBackgroundColor(draft.backgroundColor)) ||
       !isDesignId(draft.designId) || !isTextColorId(draft.textColorId) ||
-      (draft.pageBackgroundId !== undefined && !isPageBackgroundId(draft.pageBackgroundId)) ||
+      (draft.pageBackgroundColor !== undefined && !isBackgroundColor(draft.pageBackgroundColor)) ||
+      (draft.pageBackgroundColor === undefined && draft.pageBackgroundId !== undefined && !isPageBackgroundId(draft.pageBackgroundId)) ||
       typeof draft.editorOpen !== "boolean" || typeof draft.sharedMode !== "boolean") return;
     set({ spotifyUrl: draft.spotifyUrl, message: draft.message,
       tapeShellId: isTapeShellId(draft.tapeShellId) ? draft.tapeShellId : DEFAULT_TAPE_SHELL_ID,
       backgroundId: draft.backgroundId,
       backgroundColor: isBackgroundColor(draft.backgroundColor) ? draft.backgroundColor.toLowerCase() : null,
       designId: draft.designId, textColorId: draft.textColorId,
-      pageBackgroundId: isPageBackgroundId(draft.pageBackgroundId) ? draft.pageBackgroundId : DEFAULT_PAGE_BACKGROUND_ID,
+      pageBackgroundColor: isBackgroundColor(draft.pageBackgroundColor)
+        ? draft.pageBackgroundColor.toLowerCase()
+        : PAGE_BACKGROUND_OPTIONS.find((option) => option.id === draft.pageBackgroundId)?.color ?? DEFAULT_PAGE_BACKGROUND_COLOR,
       editorOpen: draft.editorOpen, sharedMode: draft.sharedMode });
   },
 }));

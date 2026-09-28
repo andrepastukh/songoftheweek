@@ -1,4 +1,4 @@
-import type { BackgroundId, DesignId, PageBackgroundId, TapeShellId, TextColorId } from "./tapeOptions";
+import type { BackgroundId, DesignId, TapeShellId, TextColorId } from "./tapeOptions";
 
 export type TapeDesign = {
   spotifyTrackId: string;
@@ -8,9 +8,9 @@ export type TapeDesign = {
   backgroundColor: string | null;
   designId: DesignId;
   textColorId: TextColorId;
-  pageBackgroundId: PageBackgroundId;
+  pageBackgroundColor: string;
 };
 
 export type SharedTape = TapeDesign & {
-  schemaVersion: 4;
+  schemaVersion: 5;
 };

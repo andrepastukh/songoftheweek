@@ -3,12 +3,10 @@ import { useTapeStore } from "../../state/tapeStore";
 import {
   BACKGROUND_OPTIONS,
   DESIGN_OPTIONS,
-  PAGE_BACKGROUND_OPTIONS,
   TAPE_SHELL_OPTIONS,
   TEXT_COLOR_OPTIONS,
   type BackgroundId,
   type DesignId,
-  type PageBackgroundId,
   type TapeShellId,
   type TextColorId,
 } from "../../tapeOptions";
@@ -22,7 +20,7 @@ export function TapeEditor() {
   const backgroundColor = useTapeStore((state) => state.backgroundColor);
   const designId = useTapeStore((state) => state.designId);
   const textColorId = useTapeStore((state) => state.textColorId);
-  const pageBackgroundId = useTapeStore((state) => state.pageBackgroundId);
+  const pageBackgroundColor = useTapeStore((state) => state.pageBackgroundColor);
   const sharedMode = useTapeStore((state) => state.sharedMode);
   const setMessage = useTapeStore((state) => state.setMessage);
   const setTapeShellId = useTapeStore((state) => state.setTapeShellId);
@@ -30,7 +28,7 @@ export function TapeEditor() {
   const setBackgroundColor = useTapeStore((state) => state.setBackgroundColor);
   const setDesignId = useTapeStore((state) => state.setDesignId);
   const setTextColorId = useTapeStore((state) => state.setTextColorId);
-  const setPageBackgroundId = useTapeStore((state) => state.setPageBackgroundId);
+  const setPageBackgroundColor = useTapeStore((state) => state.setPageBackgroundColor);
   const setEditorOpen = useTapeStore((state) => state.setEditorOpen);
   const selectedBackground = BACKGROUND_OPTIONS.find((option) => option.id === backgroundId) ?? BACKGROUND_OPTIONS[0];
   const displayedBackgroundColor = backgroundColor ?? selectedBackground.color;
@@ -107,13 +105,17 @@ export function TapeEditor() {
             </select>
           </label>
 
-          <label className="tape-option">
+          <label className="tape-option tape-color-option is-active">
             <span>Seitenfarbe</span>
-            <select value={pageBackgroundId} onChange={(event) => setPageBackgroundId(event.target.value as PageBackgroundId)}>
-              {PAGE_BACKGROUND_OPTIONS.map((option) => (
-                <option key={option.id} value={option.id}>{option.label}</option>
-              ))}
-            </select>
+            <span className="tape-color-control">
+              <input
+                type="color"
+                value={pageBackgroundColor}
+                onChange={(event) => setPageBackgroundColor(event.target.value)}
+                aria-label="Seitenfarbe auswählen"
+              />
+              <output>{pageBackgroundColor.toUpperCase()}</output>
+            </span>
           </label>
         </div>
       </div>

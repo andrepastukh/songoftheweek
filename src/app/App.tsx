@@ -8,17 +8,17 @@ import { useTapeStore } from "../state/tapeStore";
 import { tapeFromHash } from "../utils/shareState";
 import { SpotifyTrackInfo } from "../components/player/SpotifyTrackInfo";
 import { pauseSpotifyEmbed } from "../services/spotifyEmbed";
-import { PAGE_BACKGROUND_OPTIONS } from "../tapeOptions";
+import { buildPageTheme } from "../utils/pageTheme";
 
 export function App() {
   const editorOpen = useTapeStore((state) => state.editorOpen);
   const sharedMode = useTapeStore((state) => state.sharedMode);
   const setEditorOpen = useTapeStore((state) => state.setEditorOpen);
   const hydrateSharedTape = useTapeStore((state) => state.hydrateSharedTape);
-  const pageBackgroundId = useTapeStore((state) => state.pageBackgroundId);
+  const pageBackgroundColor = useTapeStore((state) => state.pageBackgroundColor);
   const [linkError, setLinkError] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
-  const pageBackground = PAGE_BACKGROUND_OPTIONS.find((option) => option.id === pageBackgroundId) ?? PAGE_BACKGROUND_OPTIONS[0];
+  const pageBackground = buildPageTheme(pageBackgroundColor);
   const pageStyle = {
     "--page-background": pageBackground.color,
     "--halftone-ink": pageBackground.halftone,

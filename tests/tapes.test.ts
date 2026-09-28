@@ -6,7 +6,7 @@ import { useTapeStore } from "../src/state/tapeStore";
 import type { TapeDesign } from "../src/types";
 
 const id = "4uLU6hMCjMI75M1A2tKUQC";
-const tape: TapeDesign = { spotifyTrackId: id, message: "  Für dich 💚\nSeite A  ", tapeShellId: "standard", backgroundId: "cyan", backgroundColor: null, designId: "herbs", textColorId: "white", pageBackgroundId: "grey" };
+const tape: TapeDesign = { spotifyTrackId: id, message: "  Für dich 💚\nSeite A  ", tapeShellId: "standard", backgroundId: "cyan", backgroundColor: null, designId: "herbs", textColorId: "white", pageBackgroundColor: "#6c757d" };
 
 describe("Spotify links", () => {
   it.each([`https://open.spotify.com/track/${id}`, ` https://open.spotify.com/intl-de/track/${id}?si=foo `, `spotify:track:${id}`])("accepts %s", url => expect(parseSpotifyTrackId(url)).toBe(id));
@@ -15,7 +15,7 @@ describe("Spotify links", () => {
 
 describe("tape snapshots", () => {
   it("preserves artwork, whitespace and unicode", () => {
-    expect(decodeTape(encodeTape(tape))).toEqual({ ...tape, schemaVersion: 4 });
+    expect(decodeTape(encodeTape(tape))).toEqual({ ...tape, schemaVersion: 5 });
   });
   it("projects only editable stable values", () => {
     const state = { ...tape, spotifyUrl: `spotify:track:${id}`, editorOpen: true, accessToken: "secret" };
@@ -33,7 +33,7 @@ describe("tape snapshots", () => {
     useTapeStore.getState().setMessage("Neuer Text");
     const next = createShareUrl(serializeTape(useTapeStore.getState()), original);
     expect(next).not.toBe(original);
-    expect(tapeFromHash(new URL(original).hash).tape).toEqual({ ...tape, schemaVersion: 4 });
+    expect(tapeFromHash(new URL(original).hash).tape).toEqual({ ...tape, schemaVersion: 5 });
     expect(tapeFromHash(new URL(next).hash).tape?.message).toBe("Neuer Text");
   });
   it("keeps the Pages subpath and removes OAuth parameters", () => {
@@ -42,9 +42,9 @@ describe("tape snapshots", () => {
   it("reads legacy hash links", () => {
     const legacy = btoa(JSON.stringify({ spotifyTrackId: id, message: "Hi" })).replaceAll("=", "");
     expect(tapeFromHash(`#/tape/${legacy}`).tape?.backgroundId).toBe("white");
-    expect(tapeFromHash(`#/tape/${legacy}`).tape?.pageBackgroundId).toBe("paper");
+    expect(tapeFromHash(`#/tape/${legacy}`).tape?.pageBackgroundColor).toBe("#ece7dc");
     const versionOne = btoa(JSON.stringify([1, id, "Alt", "cyan", "herbs", "white"])).replaceAll("=", "");
-    expect(decodeTape(versionOne)).toMatchObject({ message: "Alt", tapeShellId: "standard", backgroundColor: null, pageBackgroundId: "paper", schemaVersion: 4 });
+    expect(decodeTape(versionOne)).toMatchObject({ message: "Alt", tapeShellId: "standard", backgroundColor: null, pageBackgroundColor: "#ece7dc", schemaVersion: 5 });
   });
   it("preserves a custom color and supports no design", () => {
     const custom = { ...tape, backgroundColor: "#A1B2C3", designId: "none" as const };
@@ -57,6 +57,7 @@ describe("tape snapshots", () => {
   it("rejects unknown IDs, oversize messages and routes", () => {
     expect(() => parseTapeDesign({ ...tape, designId: "unknown" })).toThrow();
     expect(() => parseTapeDesign({ ...tape, tapeShellId: "unknown" })).toThrow();
+    expect(() => parseTapeDesign({ ...tape, pageBackgroundColor: "blue" })).toThrow();
     expect(() => parseTapeDesign({ ...tape, backgroundColor: "red" })).toThrow();
     expect(() => parseTapeDesign({ ...tape, message: "x".repeat(181) })).toThrow();
     expect(tapeFromHash("#/t/missing").corrupted).toBe(true);
