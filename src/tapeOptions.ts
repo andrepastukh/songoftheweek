@@ -18,9 +18,16 @@ export const BACKGROUND_OPTIONS = [
 export const DESIGN_OPTIONS = [
   { id: "lines", label: "Linien", src: "/assets/tape/design/LinienDesign.png" },
   { id: "lines-3", label: "Linien 3", src: "/assets/tape/design/LinienDesign3.png" },
+  { id: "lines-4", label: "Linien 4", src: "/assets/tape/design/LinienDesign4.png" },
+  { id: "lines-gray", label: "Linien Grau", src: "/assets/tape/design/LinienDesignGrau.png" },
+  { id: "lines-green", label: "Linien Grün", src: "/assets/tape/design/LinienDesignGreen.png" },
+  { id: "lines-orange", label: "Linien Orange", src: "/assets/tape/design/LinienDesignOrangev2.png" },
   { id: "pattern", label: "Pattern", src: "/assets/tape/design/PatternDesign.png" },
   { id: "herbs", label: "Herbst", src: "/assets/tape/design/HerbsDesign.png" },
   { id: "herbs-dark", label: "Herbst dunkel", src: "/assets/tape/design/HerbsDarkDesign.png" },
+  { id: "art", label: "Art", src: "/assets/tape/design/ArtDesign.png" },
+  { id: "art-2", label: "Art 2", src: "/assets/tape/design/ArtDesign2.png" },
+  { id: "art-3", label: "Art 3", src: "/assets/tape/design/ArtDesign3.png" },
 ] as const;
 
 export const TEXT_COLOR_OPTIONS = [
