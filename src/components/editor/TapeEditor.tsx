@@ -12,21 +12,24 @@ import {
 } from "../../tapeOptions";
 import { ShareButton } from "./ShareButton";
 import { SpotifyInput } from "./SpotifyInput";
-import { SpotifyPreviewToggle } from "../dev/SpotifyPreviewToggle";
 
 export function TapeEditor() {
   const message = useTapeStore((state) => state.message);
   const backgroundId = useTapeStore((state) => state.backgroundId);
+  const backgroundColor = useTapeStore((state) => state.backgroundColor);
   const designId = useTapeStore((state) => state.designId);
   const textColorId = useTapeStore((state) => state.textColorId);
   const pageBackgroundId = useTapeStore((state) => state.pageBackgroundId);
   const sharedMode = useTapeStore((state) => state.sharedMode);
   const setMessage = useTapeStore((state) => state.setMessage);
   const setBackgroundId = useTapeStore((state) => state.setBackgroundId);
+  const setBackgroundColor = useTapeStore((state) => state.setBackgroundColor);
   const setDesignId = useTapeStore((state) => state.setDesignId);
   const setTextColorId = useTapeStore((state) => state.setTextColorId);
   const setPageBackgroundId = useTapeStore((state) => state.setPageBackgroundId);
   const setEditorOpen = useTapeStore((state) => state.setEditorOpen);
+  const selectedBackground = BACKGROUND_OPTIONS.find((option) => option.id === backgroundId) ?? BACKGROUND_OPTIONS[0];
+  const displayedBackgroundColor = backgroundColor ?? selectedBackground.color;
 
   return (
     <aside
@@ -58,6 +61,19 @@ export function TapeEditor() {
                 <option key={option.id} value={option.id}>{option.label}</option>
               ))}
             </select>
+          </label>
+
+          <label className={`tape-option tape-color-option ${backgroundColor ? "is-active" : ""}`}>
+            <span>Eigene Farbe</span>
+            <span className="tape-color-control">
+              <input
+                type="color"
+                value={displayedBackgroundColor}
+                onChange={(event) => setBackgroundColor(event.target.value)}
+                aria-label="Eigene Hintergrundfarbe auswählen"
+              />
+              <output>{displayedBackgroundColor.toUpperCase()}</output>
+            </span>
           </label>
 
           <label className="tape-option">
@@ -98,7 +114,6 @@ export function TapeEditor() {
       </div>
 
       <ShareButton />
-      <SpotifyPreviewToggle />
     </aside>
   );
 }

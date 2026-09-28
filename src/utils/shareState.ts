@@ -4,7 +4,7 @@ import { isRecord, parseTapeDesign } from "./tapeData";
 
 export function encodeTape(input: TapeDesign): string {
   const tape = parseTapeDesign(input);
-  const compact = [2, tape.spotifyTrackId, tape.message, tape.backgroundId, tape.designId, tape.textColorId, tape.pageBackgroundId];
+  const compact = [3, tape.spotifyTrackId, tape.message, tape.backgroundId, tape.designId, tape.textColorId, tape.pageBackgroundId, tape.backgroundColor];
   const bytes = new TextEncoder().encode(JSON.stringify(compact));
   return btoa(String.fromCharCode(...bytes)).replaceAll("+", "-").replaceAll("/", "_").replaceAll("=", "");
 }
@@ -20,21 +20,27 @@ export function decodeTape(value: string): SharedTape | null {
         return { ...parseTapeDesign({
           spotifyTrackId: parsed[1], message: parsed[2], backgroundId: parsed[3], designId: parsed[4], textColorId: parsed[5],
           pageBackgroundId: DEFAULT_PAGE_BACKGROUND_ID,
-        }), schemaVersion: 2 };
+        }), schemaVersion: 3 };
       }
-      if (parsed.length !== 7 || parsed[0] !== 2) return null;
+      if (parsed[0] === 2 && parsed.length === 7) {
+        return { ...parseTapeDesign({
+          spotifyTrackId: parsed[1], message: parsed[2], backgroundId: parsed[3], designId: parsed[4], textColorId: parsed[5],
+          pageBackgroundId: parsed[6],
+        }), schemaVersion: 3 };
+      }
+      if (parsed[0] !== 3 || parsed.length !== 8) return null;
       return { ...parseTapeDesign({
         spotifyTrackId: parsed[1], message: parsed[2], backgroundId: parsed[3], designId: parsed[4], textColorId: parsed[5],
-        pageBackgroundId: parsed[6],
-      }), schemaVersion: 2 };
+        pageBackgroundId: parsed[6], backgroundColor: parsed[7],
+      }), schemaVersion: 3 };
     }
     // Legacy links used an unversioned object; early ones omitted artwork IDs.
-    if (!isRecord(parsed) || (parsed.schemaVersion !== undefined && parsed.schemaVersion !== 1 && parsed.schemaVersion !== 2)) return null;
+    if (!isRecord(parsed) || (parsed.schemaVersion !== undefined && parsed.schemaVersion !== 1 && parsed.schemaVersion !== 2 && parsed.schemaVersion !== 3)) return null;
     return { ...parseTapeDesign({
       ...parsed, backgroundId: parsed.backgroundId ?? DEFAULT_BACKGROUND_ID,
       designId: parsed.designId ?? DEFAULT_DESIGN_ID, textColorId: parsed.textColorId ?? DEFAULT_TEXT_COLOR_ID,
       pageBackgroundId: parsed.pageBackgroundId ?? DEFAULT_PAGE_BACKGROUND_ID,
-    }), schemaVersion: 2 };
+    }), schemaVersion: 3 };
   } catch { return null; }
 }
 

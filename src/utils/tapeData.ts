@@ -6,17 +6,24 @@ export function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+export function isBackgroundColor(value: unknown): value is string {
+  return typeof value === "string" && /^#[0-9a-f]{6}$/i.test(value);
+}
+
 export function parseTapeDesign(value: unknown): TapeDesign {
   if (!isRecord(value) || typeof value.spotifyTrackId !== "string" ||
     !isSpotifyTrackId(value.spotifyTrackId) || typeof value.message !== "string" ||
     value.message.length > 180 || !isBackgroundId(value.backgroundId) ||
+    (value.backgroundColor !== undefined && value.backgroundColor !== null && !isBackgroundColor(value.backgroundColor)) ||
     !isDesignId(value.designId) || !isTextColorId(value.textColorId) ||
     (value.pageBackgroundId !== undefined && !isPageBackgroundId(value.pageBackgroundId))) {
     throw new Error("Bitte Song, Nachricht und Kassettendesign überprüfen.");
   }
   return {
     spotifyTrackId: value.spotifyTrackId, message: value.message,
-    backgroundId: value.backgroundId, designId: value.designId, textColorId: value.textColorId,
+    backgroundId: value.backgroundId,
+    backgroundColor: isBackgroundColor(value.backgroundColor) ? value.backgroundColor.toLowerCase() : null,
+    designId: value.designId, textColorId: value.textColorId,
     pageBackgroundId: isPageBackgroundId(value.pageBackgroundId) ? value.pageBackgroundId : DEFAULT_PAGE_BACKGROUND_ID,
   };
 }

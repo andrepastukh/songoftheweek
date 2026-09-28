@@ -9,11 +9,13 @@ export function Tape() {
   const isPlaying = useSpotifyStore((state) => state.isPlaying || state.isStarting || state.isPreviewPlaying);
   const message = useTapeStore((state) => state.message).trim();
   const backgroundId = useTapeStore((state) => state.backgroundId);
+  const backgroundColor = useTapeStore((state) => state.backgroundColor);
   const designId = useTapeStore((state) => state.designId);
   const textColorId = useTapeStore((state) => state.textColorId);
   const background = BACKGROUND_OPTIONS.find((option) => option.id === backgroundId) ?? BACKGROUND_OPTIONS[0];
   const design = DESIGN_OPTIONS.find((option) => option.id === designId) ?? DESIGN_OPTIONS[0];
   const textColor = TEXT_COLOR_OPTIONS.find((option) => option.id === textColorId) ?? TEXT_COLOR_OPTIONS[0];
+  const whiteBackground = BACKGROUND_OPTIONS.find((option) => option.id === "white") ?? BACKGROUND_OPTIONS[0];
   const textSize = message.length > 140
     ? "4.35cqw"
     : message.length > 100
@@ -56,18 +58,33 @@ export function Tape() {
           draggable={false}
         />
         <div className="tape-label-stack">
-          <img
-            className="tape-custom-layer tape-label-background"
-            src={asset(background.src)}
-            alt=""
-            draggable={false}
-          />
-          <img
-            className="tape-custom-layer tape-label-design"
-            src={asset(design.src)}
-            alt=""
-            draggable={false}
-          />
+          {backgroundColor ? (
+            <div
+              className="tape-custom-layer tape-label-background tape-label-background--custom"
+              aria-hidden="true"
+              style={{
+                "--tape-background-color": backgroundColor,
+                backgroundImage: `url(${asset(whiteBackground.src)})`,
+                WebkitMaskImage: `url(${asset(whiteBackground.src)})`,
+                maskImage: `url(${asset(whiteBackground.src)})`,
+              } as CSSProperties}
+            />
+          ) : (
+            <img
+              className="tape-custom-layer tape-label-background"
+              src={asset(background.src)}
+              alt=""
+              draggable={false}
+            />
+          )}
+          {design.src && (
+            <img
+              className="tape-custom-layer tape-label-design"
+              src={asset(design.src)}
+              alt=""
+              draggable={false}
+            />
+          )}
           <div
             className="tape-user-text"
             style={{
