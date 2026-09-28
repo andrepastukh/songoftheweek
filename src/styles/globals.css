@@ -471,12 +471,14 @@ a:focus-visible {
   color: var(--tape-text-color);
   font-family: "Qwigley", cursive;
 
-  font-size: var(--tape-text-size); /* <-- DAS FEHLT */
+  font-size: var(--tape-text-size);
 
   font-weight: 500;
   line-height: 1.05;
   letter-spacing: 0.01em;
   text-align: center;
+  overflow-wrap: anywhere;
+  word-break: break-word;
   white-space: pre-wrap;
 }
 

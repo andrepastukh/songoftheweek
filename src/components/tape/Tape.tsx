@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import { useTapeStore } from "../../state/tapeStore";
 import { useSpotifyStore } from "../../state/spotifyStore";
 import { BACKGROUND_OPTIONS, DESIGN_OPTIONS, TEXT_COLOR_OPTIONS } from "../../tapeOptions";
+import { getTapeTextSize } from "../../utils/tapeText";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, "")}`;
 
@@ -17,15 +18,7 @@ export function Tape() {
   const design = DESIGN_OPTIONS.find((option) => option.id === designId) ?? DESIGN_OPTIONS[0];
   const textColor = TEXT_COLOR_OPTIONS.find((option) => option.id === textColorId) ?? TEXT_COLOR_OPTIONS[0];
   const whiteBackground = BACKGROUND_OPTIONS.find((option) => option.id === "white") ?? BACKGROUND_OPTIONS[0];
-  const textSize = message.length > 140
-    ? "4.35cqw"
-    : message.length > 100
-      ? "4.55cqw"
-      : message.length > 60
-        ? "4.75cqw"
-        : message.length > 30
-          ? "4.05cqw"
-          : "4.35cqw";
+  const textSize = getTapeTextSize(message);
 
   return (
     <figure
