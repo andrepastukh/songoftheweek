@@ -34,6 +34,12 @@ export const DESIGN_OPTIONS = [
   { id: "art", label: "Art", src: "/assets/tape/design/ArtDesign.png" },
   { id: "art-2", label: "Art 2", src: "/assets/tape/design/ArtDesign2.png" },
   { id: "art-3", label: "Art 3", src: "/assets/tape/design/ArtDesign3.png" },
+  { id: "vintage-sunset", label: "Vintage · Sunset 1977", src: "/assets/tape/design/VintageSunsetDesign.png" },
+  { id: "vintage-studio-blue", label: "Vintage · Studio Blue 1981", src: "/assets/tape/design/VintageStudioBlueDesign.png" },
+  { id: "vintage-crimson", label: "Vintage · Crimson 1985", src: "/assets/tape/design/VintageCrimsonDesign.png" },
+  { id: "vintage-forest", label: "Vintage · Forest Hi-Fi 1979", src: "/assets/tape/design/VintageForestDesign.png" },
+  { id: "vintage-wave", label: "Vintage · Wave 1991", src: "/assets/tape/design/VintageWaveDesign.png" },
+  { id: "vintage-graphite", label: "Vintage · Graphite 1988", src: "/assets/tape/design/VintageGraphiteDesign.png" },
 ] as const;
 
 export const TEXT_COLOR_OPTIONS = [

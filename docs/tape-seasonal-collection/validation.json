@@ -1,0 +1,182 @@
+{
+  "count": 15,
+  "checks": [
+    {
+      "file": "AutumnMapleDesign.png",
+      "width": 2000,
+      "height": 1333,
+      "format": "PNG RGBA8",
+      "maskMismatches": 0,
+      "messagePixels": 0,
+      "windowAndExteriorLeaks": 0,
+      "pass": true
+    },
+    {
+      "file": "AutumnRainDesign.png",
+      "width": 2000,
+      "height": 1333,
+      "format": "PNG RGBA8",
+      "maskMismatches": 0,
+      "messagePixels": 0,
+      "windowAndExteriorLeaks": 0,
+      "pass": true
+    },
+    {
+      "file": "AutumnBerriesDesign.png",
+      "width": 2000,
+      "height": 1333,
+      "format": "PNG RGBA8",
+      "maskMismatches": 0,
+      "messagePixels": 0,
+      "windowAndExteriorLeaks": 0,
+      "pass": true
+    },
+    {
+      "file": "AutumnPlaidDesign.png",
+      "width": 2000,
+      "height": 1333,
+      "format": "PNG RGBA8",
+      "maskMismatches": 0,
+      "messagePixels": 0,
+      "windowAndExteriorLeaks": 0,
+      "pass": true
+    },
+    {
+      "file": "WinterSnowDesign.png",
+      "width": 2000,
+      "height": 1333,
+      "format": "PNG RGBA8",
+      "maskMismatches": 0,
+      "messagePixels": 0,
+      "windowAndExteriorLeaks": 0,
+      "pass": true
+    },
+    {
+      "file": "WinterPinesDesign.png",
+      "width": 2000,
+      "height": 1333,
+      "format": "PNG RGBA8",
+      "maskMismatches": 0,
+      "messagePixels": 0,
+      "windowAndExteriorLeaks": 0,
+      "pass": true
+    },
+    {
+      "file": "WinterAuroraDesign.png",
+      "width": 2000,
+      "height": 1333,
+      "format": "PNG RGBA8",
+      "maskMismatches": 0,
+      "messagePixels": 0,
+      "windowAndExteriorLeaks": 0,
+      "pass": true
+    },
+    {
+      "file": "WinterKnitDesign.png",
+      "width": 2000,
+      "height": 1333,
+      "format": "PNG RGBA8",
+      "maskMismatches": 0,
+      "messagePixels": 0,
+      "windowAndExteriorLeaks": 0,
+      "pass": true
+    },
+    {
+      "file": "HalloweenPumpkinsDesign.png",
+      "width": 2000,
+      "height": 1333,
+      "format": "PNG RGBA8",
+      "maskMismatches": 0,
+      "messagePixels": 0,
+      "windowAndExteriorLeaks": 0,
+      "pass": true
+    },
+    {
+      "file": "HalloweenGhostsDesign.png",
+      "width": 2000,
+      "height": 1333,
+      "format": "PNG RGBA8",
+      "maskMismatches": 0,
+      "messagePixels": 0,
+      "windowAndExteriorLeaks": 0,
+      "pass": true
+    },
+    {
+      "file": "PatternVerticalDesign.png",
+      "width": 2000,
+      "height": 1333,
+      "format": "PNG RGBA8",
+      "maskMismatches": 0,
+      "messagePixels": 0,
+      "windowAndExteriorLeaks": 0,
+      "pass": true
+    },
+    {
+      "file": "PatternDiagonalDesign.png",
+      "width": 2000,
+      "height": 1333,
+      "format": "PNG RGBA8",
+      "maskMismatches": 0,
+      "messagePixels": 0,
+      "windowAndExteriorLeaks": 0,
+      "pass": true
+    },
+    {
+      "file": "PatternTerrazzoDesign.png",
+      "width": 2000,
+      "height": 1333,
+      "format": "PNG RGBA8",
+      "maskMismatches": 0,
+      "messagePixels": 0,
+      "windowAndExteriorLeaks": 0,
+      "pass": true
+    },
+    {
+      "file": "RetrowaveNeonDesign.png",
+      "width": 2000,
+      "height": 1333,
+      "format": "PNG RGBA8",
+      "maskMismatches": 0,
+      "messagePixels": 0,
+      "windowAndExteriorLeaks": 0,
+      "pass": true
+    },
+    {
+      "file": "PaperNoteDesign.png",
+      "width": 2000,
+      "height": 1333,
+      "format": "PNG RGBA8",
+      "maskMismatches": 0,
+      "messagePixels": 0,
+      "windowAndExteriorLeaks": 0,
+      "pass": true
+    }
+  ],
+  "registration": {
+    "totalOptions": 34,
+    "allPathsExist": true,
+    "uniqueIds": true,
+    "existingDesignFilesUnchanged": 18,
+    "onlyNewEntriesAdded": true
+  },
+  "browserAndBuild": "Not run: execution and browser runtimes unavailable",
+  "mask": {
+    "template": "public/assets/tape/background_color/background_color_weiss.png",
+    "artStartY": 536,
+    "protectedBottomRects": [
+      [
+        535,
+        725,
+        748,
+        795
+      ],
+      [
+        1243,
+        725,
+        1465,
+        795
+      ]
+    ],
+    "note": "Original label alpha preserved within art domain; dynamic message and static bottom text remain transparent"
+  }
+}

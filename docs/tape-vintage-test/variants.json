@@ -1,0 +1,80 @@
+[
+  {
+    "file": "VintageSunsetDesign.png",
+    "name": "01 · Sunset 1977",
+    "colors": [
+      "#d5ad67",
+      "#c27935",
+      "#9e492e",
+      "#563b2b"
+    ],
+    "bg": "beige",
+    "song": "Dreams",
+    "artist": "Fleetwood Mac"
+  },
+  {
+    "file": "VintageStudioBlueDesign.png",
+    "name": "02 · Studio Blue 1981",
+    "colors": [
+      "#c3d4d9",
+      "#6d96aa",
+      "#36566b",
+      "#233d50"
+    ],
+    "bg": "white",
+    "song": "In the Air Tonight",
+    "artist": "Phil Collins"
+  },
+  {
+    "file": "VintageCrimsonDesign.png",
+    "name": "03 · Crimson 1985",
+    "colors": [
+      "#b9453b",
+      "#dfb9a0",
+      "#752d30",
+      "#292f34"
+    ],
+    "bg": "white",
+    "song": "Running Up That Hill",
+    "artist": "Kate Bush"
+  },
+  {
+    "file": "VintageForestDesign.png",
+    "name": "04 · Forest Hi-Fi 1979",
+    "colors": [
+      "#344d43",
+      "#71836b",
+      "#b6b69a",
+      "#d9c9a3"
+    ],
+    "bg": "beige",
+    "song": "The Chain",
+    "artist": "Fleetwood Mac"
+  },
+  {
+    "file": "VintageWaveDesign.png",
+    "name": "05 · Wave 1991",
+    "colors": [
+      "#356b74",
+      "#829c9b",
+      "#be8491",
+      "#4b4865"
+    ],
+    "bg": "white",
+    "song": "Enjoy the Silence",
+    "artist": "Depeche Mode"
+  },
+  {
+    "file": "VintageGraphiteDesign.png",
+    "name": "06 · Graphite 1988",
+    "colors": [
+      "#454a4e",
+      "#85898b",
+      "#b1aaa0",
+      "#a88c56"
+    ],
+    "bg": "white",
+    "song": "Fast Car",
+    "artist": "Tracy Chapman"
+  }
+]

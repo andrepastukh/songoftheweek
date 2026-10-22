@@ -1,0 +1,182 @@
+[
+  {
+    "id": "autumn-maple",
+    "label": "Herbst · Goldene Blätter",
+    "file": "AutumnMapleDesign.png",
+    "kind": "maple",
+    "palette": [
+      "#efdfba",
+      "#b66a35",
+      "#893f32",
+      "#6d7042"
+    ]
+  },
+  {
+    "id": "autumn-rain",
+    "label": "Herbst · Regentag",
+    "file": "AutumnRainDesign.png",
+    "kind": "rain",
+    "palette": [
+      "#ccd7d4",
+      "#607f84",
+      "#bba07b",
+      "#dc925a"
+    ]
+  },
+  {
+    "id": "autumn-berries",
+    "label": "Herbst · Waldbeeren",
+    "file": "AutumnBerriesDesign.png",
+    "kind": "berries",
+    "palette": [
+      "#d6c7ac",
+      "#747b51",
+      "#a95843",
+      "#523e39"
+    ]
+  },
+  {
+    "id": "autumn-plaid",
+    "label": "Herbst · Wollschal",
+    "file": "AutumnPlaidDesign.png",
+    "kind": "plaid",
+    "palette": [
+      "#cda76d",
+      "#905643",
+      "#575d4b",
+      "#e9dac0"
+    ]
+  },
+  {
+    "id": "winter-snow",
+    "label": "Winter · Leiser Schnee",
+    "file": "WinterSnowDesign.png",
+    "kind": "snow",
+    "palette": [
+      "#d7e7e9",
+      "#8aa9b6",
+      "#4d7186",
+      "#f5f7ef"
+    ]
+  },
+  {
+    "id": "winter-pines",
+    "label": "Winter · Tannenwald",
+    "file": "WinterPinesDesign.png",
+    "kind": "pines",
+    "palette": [
+      "#cfdbd5",
+      "#78958b",
+      "#3d645e",
+      "#244c4a"
+    ]
+  },
+  {
+    "id": "winter-aurora",
+    "label": "Winter · Polarlicht",
+    "file": "WinterAuroraDesign.png",
+    "kind": "aurora",
+    "palette": [
+      "#263f54",
+      "#63a79a",
+      "#8c91ae",
+      "#e6e8da"
+    ]
+  },
+  {
+    "id": "winter-knit",
+    "label": "Winter · Strickpullover",
+    "file": "WinterKnitDesign.png",
+    "kind": "knit",
+    "palette": [
+      "#c9b4ab",
+      "#f3e9d7",
+      "#8b5f5c",
+      "#b88e7e"
+    ]
+  },
+  {
+    "id": "halloween-pumpkins",
+    "label": "Halloween · Kürbisnacht",
+    "file": "HalloweenPumpkinsDesign.png",
+    "kind": "pumpkins",
+    "palette": [
+      "#413744",
+      "#c47d38",
+      "#e3ad55",
+      "#858366"
+    ]
+  },
+  {
+    "id": "halloween-ghosts",
+    "label": "Halloween · Geisterstunde",
+    "file": "HalloweenGhostsDesign.png",
+    "kind": "ghosts",
+    "palette": [
+      "#76768d",
+      "#eee8d4",
+      "#bbb1bd",
+      "#383b52"
+    ]
+  },
+  {
+    "id": "pattern-vertical",
+    "label": "Muster · Vertikale Streifen",
+    "file": "PatternVerticalDesign.png",
+    "kind": "vertical",
+    "palette": [
+      "#d5c6ad",
+      "#597c7a",
+      "#b76850",
+      "#e6ad65"
+    ]
+  },
+  {
+    "id": "pattern-diagonal",
+    "label": "Muster · Diagonale Streifen",
+    "file": "PatternDiagonalDesign.png",
+    "kind": "diagonal",
+    "palette": [
+      "#d9d8cc",
+      "#687e9c",
+      "#bf7f86",
+      "#d6ad63"
+    ]
+  },
+  {
+    "id": "pattern-terrazzo",
+    "label": "Muster · Terrazzo",
+    "file": "PatternTerrazzoDesign.png",
+    "kind": "terrazzo",
+    "palette": [
+      "#e7dfcc",
+      "#4f7774",
+      "#bd735a",
+      "#d4b36c"
+    ]
+  },
+  {
+    "id": "retrowave-neon",
+    "label": "Retrowave · Neon Sunset",
+    "file": "RetrowaveNeonDesign.png",
+    "kind": "retro",
+    "palette": [
+      "#3f365d",
+      "#e471aa",
+      "#789fc6",
+      "#eeb982"
+    ]
+  },
+  {
+    "id": "paper-note",
+    "label": "Papier · Notizzettel",
+    "file": "PaperNoteDesign.png",
+    "kind": "note",
+    "palette": [
+      "#e8ddbc",
+      "#89a9b2",
+      "#ba8072",
+      "#b3a17d"
+    ]
+  }
+]

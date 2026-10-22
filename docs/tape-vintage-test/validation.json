@@ -1,0 +1,63 @@
+{
+  "reference": "public/assets/tape/design/LinienDesign3.png",
+  "checks": [
+    {
+      "file": "VintageSunsetDesign.png",
+      "format": "PNG",
+      "width": 2000,
+      "height": 1333,
+      "channels": "RGBA8",
+      "alphaMismatches": 0,
+      "pass": true
+    },
+    {
+      "file": "VintageStudioBlueDesign.png",
+      "format": "PNG",
+      "width": 2000,
+      "height": 1333,
+      "channels": "RGBA8",
+      "alphaMismatches": 0,
+      "pass": true
+    },
+    {
+      "file": "VintageCrimsonDesign.png",
+      "format": "PNG",
+      "width": 2000,
+      "height": 1333,
+      "channels": "RGBA8",
+      "alphaMismatches": 0,
+      "pass": true
+    },
+    {
+      "file": "VintageForestDesign.png",
+      "format": "PNG",
+      "width": 2000,
+      "height": 1333,
+      "channels": "RGBA8",
+      "alphaMismatches": 0,
+      "pass": true
+    },
+    {
+      "file": "VintageWaveDesign.png",
+      "format": "PNG",
+      "width": 2000,
+      "height": 1333,
+      "channels": "RGBA8",
+      "alphaMismatches": 0,
+      "pass": true
+    },
+    {
+      "file": "VintageGraphiteDesign.png",
+      "format": "PNG",
+      "width": 2000,
+      "height": 1333,
+      "channels": "RGBA8",
+      "alphaMismatches": 0,
+      "pass": true
+    }
+  ],
+  "originalFilesChecked": 62,
+  "changedOriginals": [],
+  "browserRendering": "Not executed: browser runtime failed to start",
+  "frontendIntegration": "Not changed; design IDs are allowlisted in src/tapeOptions.ts"
+}
